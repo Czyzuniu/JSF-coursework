@@ -12,4 +12,6 @@
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="onlineDiary" object-type="user" pool-name="derby_net_OnlineDiary_rootPool"/>
     <jdbc-resource enabled="true" jndi-name="diary_database" object-type="user" pool-name="derby_net_OnlineDiary_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="diary_db" object-type="user" pool-name="derby_net_OnlineDiary_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="online_diary_new" object-type="user" pool-name="derby_net_OnlineDiary_rootPool"/>
 </resources>

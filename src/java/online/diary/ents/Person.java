@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -17,12 +18,17 @@ import javax.persistence.Id;
  */
 @Entity
 public class Person implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     private String firstName;
     private String lastName;
+    private String userName;
+    private String password;
+    private String emailAddress;
+    private String phoneNumber;
 
     public String getFirstName() {
         return firstName;
@@ -55,8 +61,23 @@ public class Person implements Serializable {
     public void setPassword(String password) {
         this.password = password;
     }
-    private String userName;
-    private String password;
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
 
     public Long getId() {
         return id;

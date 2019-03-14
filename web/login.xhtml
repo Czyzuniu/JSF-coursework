@@ -1,0 +1,79 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core">
+     
+    <h:head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </h:head>
+    
+    <h:body>
+        <h:form id="loginForm">
+            <h:panelGroup layout="block" class="logo">
+                <h1>Online Diary</h1>
+            </h:panelGroup>
+            <h:panelGroup layout="block" class="main">
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <i class="material-icons prefix">account_circle</i>
+                        <h:outputLabel for="userName" value="Username" class="validate"/>
+                        <h:inputText  id="userName" value="#{personController.currentUser.userName}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <i class="material-icons prefix">lock</i>
+                        <h:outputLabel for="password" value="Password" class="validate"/>
+                        <h:inputSecret  id="password" value="#{personController.currentUser.password}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+              
+                <!--<h:link class="waves-effect waves-light btn-small blue lighten-1"><i class="material-icons right">info</i>Cannot log in?</h:link>-->
+                
+                <h:panelGroup class="registerContainer">
+                    <h:commandLink class="waves-effect waves-light btn-small grey darken-1" action="#{personController.goToRegister()}">
+                        <i class="material-icons right">chevron_right</i>Create account
+                    </h:commandLink>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:commandLink class="waves-effect waves-light btn-small grey darken-1" action="#{personController.login()}">
+                <i class="material-icons right">chevron_right</i>Log in
+            </h:commandLink>
+            <h:messages style="color:red" id="messages"/>
+        </h:form>
+    </h:body>
+    
+    
+    <style>
+        #loginForm {
+            background-color:white;
+            height:100vh;
+            width:100%;
+            overflow:hidden;
+            display:flex;
+            justify-content: center;
+            align-items:center;
+            flex-direction: column;
+        }
+        
+        .main {
+            width: 50%;
+            height: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .inputContainer {
+            width:75%
+        }
+        
+        .inputLabel {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+    </style>
+</html>
