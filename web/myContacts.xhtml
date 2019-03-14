@@ -20,7 +20,7 @@
                 <ul id="nav" class="right hide-on-med-and-down">
                   <li>
                       <h:link 
-                          value="Home" outcome="login" >
+                          value="Home" outcome="home" >
                       </h:link>
                   </li>
                   <li>
@@ -30,7 +30,7 @@
                   </li>
                   <li>
                       <h:link 
-                          value="My Contacts" outcome="myContacts">
+                          value="My Contacts">
                       </h:link>
                   </li>
                   <li>
@@ -50,15 +50,15 @@
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="collection">
-                <ui:repeat value="#{personController.allUsers}" var="user">
-                    <h:panelGroup class="collection personRow">
-                        <p>#{user.firstName}</p>
-                        <p>#{user.lastName}</p>
-                        <p>#{user.emailAddress}</p>
-                        <p>#{user.phoneNumber}</p>
-                        <h:commandButton value="click" action="${personController.addToContacts(user)}"/>
-                    </h:panelGroup>
-                </ui:repeat>  
+                    <ui:repeat value="#{personController.currentUser.contacts}" var="user">
+                        <h:panelGroup class="collection personRow">
+                            <p>#{user.contact.firstName}</p>
+                            <p>#{user.contact.lastName}</p>
+                            <p>#{user.contact.emailAddress}</p>
+                            <p>#{user.contact.phoneNumber}</p>
+    <!--                        <h:commandButton value="click" action="${personController.addToContacts(user)}"/>-->
+                        </h:panelGroup>
+                    </ui:repeat>  
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>

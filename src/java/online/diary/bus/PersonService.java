@@ -9,14 +9,13 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import online.diary.ents.Contact;
 import online.diary.pers.PersonFacade;
 import online.diary.ents.Person;
+import online.diary.pers.ContactFacade;
 /**
  *
  * @author Konrad
@@ -25,6 +24,9 @@ import online.diary.ents.Person;
 public class PersonService {
     @EJB
     private PersonFacade pf;
+    
+    @EJB
+    private ContactFacade contactFacade;
     
  
     public String hashPassword(String passwordToHash) throws NoSuchAlgorithmException  {
@@ -88,7 +90,20 @@ public class PersonService {
             throw new PersonException("Incorrect username or password");
         }
         return results;
+    }
+    
+    public List<Person> getAllUsers() throws PersonException{
         
+        //filter in db later to not return the same logged user
         
+        List<Person> results = pf.getAllUsers();
+        return results;
+    }
+    
+    public Contact addToContacts(Person person, Contact contact) {
+        //check duplicates later
+        contactFacade.create(contact);
+        person.getContacts().add(contact);
+        return contact;
     }
 }

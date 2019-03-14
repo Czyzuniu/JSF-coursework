@@ -39,4 +39,11 @@ public class PersonFacade extends AbstractFacade<Person> {
         return query.getResultList();
     }
     
+    public List<Person> getAllUsers() {
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+        return query.getResultList();
+    }
+    
+   
+    
 }

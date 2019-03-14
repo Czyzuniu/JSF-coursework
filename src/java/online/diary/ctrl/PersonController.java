@@ -5,6 +5,7 @@
  */
 package online.diary.ctrl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -12,6 +13,7 @@ import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
+import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import online.diary.ents.Person;
 import javax.inject.Named;
@@ -19,18 +21,22 @@ import online.diary.bus.PersonException;
 import online.diary.bus.PersonService;
 import online.diary.bus.AddressService;
 import online.diary.ents.Address;
+import online.diary.ents.Contact;
 /**
  *
  * @author Konrad
  */
 @ManagedBean
-@RequestScoped
+@SessionScoped
 @Named(value = "personController")
 public class PersonController {
     private Person newUser = new Person();
     private Address address = new Address();
     private Person currentUser = new Person();
     private String repeatPassword = "";
+    private List<Person> allUsers = new ArrayList();
+
+ 
     
     @EJB
     private PersonService personService;
@@ -76,9 +82,24 @@ public class PersonController {
      * Creates a new instance of PersonController
      */
     public PersonController() {
-        
+
     }
    
+       public List<Person> getAllUsers() {
+        return allUsers;
+    }
+
+    public void setAllUsers(ArrayList<Person> allUsers) {
+        this.allUsers = allUsers;
+    }
+
+    public AddressService getAddressService() {
+        return addressService;
+    }
+
+    public void setAddressService(AddressService addressService) {
+        this.addressService = addressService;
+    }
     
     
     public String registerUser() {
@@ -119,9 +140,34 @@ public class PersonController {
         String responseView = "";
         if (isAuthenticated) {
             responseView = "home";
+            try {
+                allUsers = personService.getAllUsers();
+            } catch (PersonException ex) {
+                Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } 
         
         return responseView;
+    }
+    
+    
+    public void onPageLoad(){
+        
+        if (currentUser.getContacts() != null) {
+            System.out.println(currentUser.getContacts().size());   
+        }
+        try {
+            allUsers = personService.getAllUsers();
+            
+        } catch (PersonException ex) {
+            Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public String addToContacts(Person person) {
+        Contact contact = new Contact();
+        contact.setContact(person);
+        return "";
     }
     
     

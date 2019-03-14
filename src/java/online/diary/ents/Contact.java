@@ -10,6 +10,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -21,6 +23,9 @@ public class Contact implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @ManyToOne
+    @NotNull
+    private Person contact;
 
     public Long getId() {
         return id;
@@ -29,6 +34,15 @@ public class Contact implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public Person getContact() {
+        return contact;
+    }
+
+    public void setContact(Person contact) {
+        this.contact = contact;
+    }
+
 
     @Override
     public int hashCode() {

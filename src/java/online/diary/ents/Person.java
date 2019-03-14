@@ -6,11 +6,12 @@
 package online.diary.ents;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
@@ -29,10 +30,21 @@ public class Person implements Serializable {
     private String password;
     private String emailAddress;
     private String phoneNumber;
+    @OneToMany(mappedBy = "contact")
+    List<Contact>contacts;
 
     public String getFirstName() {
         return firstName;
     }
+
+    public List<Contact> getContacts() {
+        return contacts;
+    }
+
+    public void setContacts(List<Contact> contacts) {
+        this.contacts = contacts;
+    }
+    
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;
