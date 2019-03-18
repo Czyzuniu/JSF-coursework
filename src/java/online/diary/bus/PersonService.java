@@ -82,7 +82,7 @@ public class PersonService {
             return "";
         }
     }
-    
+
     
     public List<Person> findPersonByUsernameAndPassword(String userName, String password) throws PersonException{
         List<Person> results = pf.findPersonByUsernameAndPassword(userName, password);
@@ -92,16 +92,14 @@ public class PersonService {
         return results;
     }
     
-    public List<Person> getAllUsers() throws PersonException{
-        
-        //filter in db later to not return the same logged user
-        
-        List<Person> results = pf.getAllUsers();
+    public List<Person> getAllUsersWithoutLoggedUser(Person currentUser) throws PersonException{
+        List<Person> results = pf.getAllUsersWithoutLoggedUser(currentUser.getUserName());
         return results;
     }
     
     public Contact addToContacts(Person person, Contact contact) {
         //check duplicates later
+        
         contactFacade.create(contact);
         person.getContacts().add(contact);
         return contact;

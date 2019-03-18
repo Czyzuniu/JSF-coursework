@@ -41,7 +41,6 @@ public class Address implements Serializable {
     public void setPerson(Person person) {
         this.person = person;
     }
-    
 
     public void setCountry(String country) {
         this.country = country;

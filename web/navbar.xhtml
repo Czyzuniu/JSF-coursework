@@ -1,0 +1,35 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://xmlns.jcp.org/jsf/html">
+
+      <nav>
+            <h:form class="nav-wrapper">
+                <ul id="nav" class="right hide-on-med-and-down">
+                  <li>
+                      <h:link 
+                          value="Home" outcome="home" >
+                      </h:link>
+                  </li>
+                  <li>
+                      <h:link 
+                          value="My Profile" outcome="profile">
+                      </h:link>
+                  </li>
+                  <li>
+                      <h:link 
+                          value="My Contacts" outcome="myContacts">
+                      </h:link>
+                  </li>
+                  <li>
+                      <h:link 
+                          value="My Appointments" >
+                      </h:link>
+                  </li>
+                  <li>
+                        <h:commandLink value="Sign out" action="#{personController.signOut()}" />
+                  </li>
+                </ul>
+            </h:form>
+        </nav>
+    
+</ui:composition>

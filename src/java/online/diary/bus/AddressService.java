@@ -20,7 +20,7 @@ public class AddressService {
     @EJB
     private AddressFacade af;
     
-    public Address createAddressAndSetResident(Address address) {
+    public Address createAddress(Address address) {
         af.create(address);
         return address;  
     }

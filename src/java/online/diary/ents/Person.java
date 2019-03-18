@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -30,12 +31,24 @@ public class Person implements Serializable {
     private String password;
     private String emailAddress;
     private String phoneNumber;
-    @OneToMany(mappedBy = "contact")
+    @OneToMany
     List<Contact>contacts;
+    @OneToOne
+    private Address address;
 
     public String getFirstName() {
         return firstName;
     }
+
+    public Address getAddress() {
+        return address;
+    }
+
+    public void setAddress(Address address) {
+        this.address = address;
+    }
+    
+    
 
     public List<Contact> getContacts() {
         return contacts;
@@ -44,7 +57,7 @@ public class Person implements Serializable {
     public void setContacts(List<Contact> contacts) {
         this.contacts = contacts;
     }
-    
+
 
     public void setFirstName(String firstName) {
         this.firstName = firstName;

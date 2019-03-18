@@ -12,6 +12,7 @@
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/PersonService.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AddressFacade.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/AddressService.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/navbar.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/resources/css/style.css</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/conf/MANIFEST.MF</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Contact.java</file>
@@ -20,6 +21,7 @@
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/WEB-INF/web.xml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/home.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AbstractFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/profile.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/PersonException.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Address.java</file>
         </group>

@@ -24,7 +24,8 @@ public class Contact implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
     @ManyToOne
-    @NotNull
+    private Person person;
+    @ManyToOne
     private Person contact;
 
     public Long getId() {
@@ -35,6 +36,16 @@ public class Contact implements Serializable {
         this.id = id;
     }
 
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
+    }
+
+    
+    
     public Person getContact() {
         return contact;
     }

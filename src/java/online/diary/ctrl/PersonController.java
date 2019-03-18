@@ -35,8 +35,6 @@ public class PersonController {
     private Person currentUser = new Person();
     private String repeatPassword = "";
     private List<Person> allUsers = new ArrayList();
-
- 
     
     @EJB
     private PersonService personService;
@@ -106,8 +104,7 @@ public class PersonController {
         String responseView = "";
         try {
             Person registeredPerson = personService.registerUser(newUser); 
-            address.setPerson(registeredPerson);
-            addressService.createAddressAndSetResident(address);
+            registeredPerson.setAddress(addressService.createAddress(address));
             responseView = "login";
         } catch (PersonException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(ex.getMessage()));
@@ -118,7 +115,7 @@ public class PersonController {
            
     
     public String goToRegister() {    
-        return "register";
+        return "/register.xhtml?faces-redirect=true";
     }
     
     
@@ -139,12 +136,7 @@ public class PersonController {
        
         String responseView = "";
         if (isAuthenticated) {
-            responseView = "home";
-            try {
-                allUsers = personService.getAllUsers();
-            } catch (PersonException ex) {
-                Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            responseView = "/home.xhtml?faces-redirect=true";;
         } 
         
         return responseView;
@@ -157,7 +149,7 @@ public class PersonController {
             System.out.println(currentUser.getContacts().size());   
         }
         try {
-            allUsers = personService.getAllUsers();
+            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
             
         } catch (PersonException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
@@ -166,10 +158,19 @@ public class PersonController {
     
     public String addToContacts(Person person) {
         Contact contact = new Contact();
+        contact.setPerson(currentUser);
         contact.setContact(person);
+        personService.addToContacts(currentUser, contact);
         return "";
     }
     
+    public String signOut() {
+        currentUser = new Person();
+        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        return "/login.xhtml?faces-redirect=true";
+    }
     
-    
+    public String editUser() {
+        return "/home.xhtml?faces-redirect=true";
+    }
 }

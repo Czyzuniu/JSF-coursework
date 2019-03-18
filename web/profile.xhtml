@@ -1,0 +1,125 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+     
+    <h:head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </h:head>
+    
+    <h:body>
+        <ui:include src="navbar.xhtml"/>
+        <h:form id="registerForm">
+            <h:panelGroup layout="block" class="main">
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="userName" value="Username *" class="validate"/>
+                        <h:inputText  id="userName" value="#{personController.currentUser.userName}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="firstName" value="First name *" class="validate"/>
+                        <h:inputText  id="firstName" value="#{personController.currentUser.firstName}"/>
+                    </h:panelGroup>
+                     <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="lastName" value="Last name *" class="validate"/>
+                        <h:inputText  id="lastName" value="#{personController.currentUser.lastName}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="country" value="Country" class="validate"/>
+                        <h:inputText  id="country"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="street" value="Street" class="validate"/>
+                        <h:inputText  id="street" value="#{personController.currentUser.address.city}"/>
+                    </h:panelGroup>
+                     <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="city" value="City" class="validate"/>
+                        <h:inputText  id="city" value="#{personController.currentUser.address.city}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="postal" value="Postal / Zip code" class="validate" />
+                        <h:inputText  id="postal" value="#{personController.currentUser.address.postalAddress}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="email" value="Phone number" class="validate"/>
+                        <h:inputText  id="phone" value="#{personController.currentUser.phoneNumber}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="email" value="Email address *" class="validate" />
+                        <h:inputText  id="email" value="#{personController.currentUser.emailAddress}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+           <h:messages style="color:red" id="messages"/>
+                <h:commandLink class="waves-effect waves-light btn-small grey darken-1" action="#{personController.editUser()}">
+                    <i class="material-icons right">chevron_right</i>Edit details
+                </h:commandLink>
+        </h:form>
+    </h:body>
+    
+    
+    <style>
+        #registerForm {
+            background-color:white;
+            height:100vh;
+            width:100%;
+            overflow:hidden;
+            display:flex;
+            justify-content: center;
+            align-items:center;
+            flex-direction: column;
+        }
+        
+        .main {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+            align-items: center;
+            overflow: auto;
+        }
+        
+        .inlineRow {
+            display:flex;
+            justify-content: center;
+        }
+        
+        .inlineInput {
+            width:50%;
+        }
+        
+        .inputContainer {
+            width:75%;
+            display:flex;
+        }
+        
+        .inputLabel {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+        
+        .input-field {
+            margin:5px;
+            width:100%;
+        }
+    </style>
+</html>

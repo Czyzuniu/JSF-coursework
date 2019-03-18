@@ -39,8 +39,9 @@ public class PersonFacade extends AbstractFacade<Person> {
         return query.getResultList();
     }
     
-    public List<Person> getAllUsers() {
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p", Person.class);
+    public List<Person> getAllUsersWithoutLoggedUser(String username) {
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName != :userName", Person.class);
+        query.setParameter("userName", username);
         return query.getResultList();
     }
     
