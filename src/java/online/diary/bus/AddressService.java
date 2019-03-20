@@ -25,5 +25,10 @@ public class AddressService {
         return address;  
     }
     
+    public Address updateAddress(Address address) {
+        af.edit(address);
+        return address;
+    }
+    
        
 }

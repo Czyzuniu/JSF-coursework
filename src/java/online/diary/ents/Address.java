@@ -27,7 +27,8 @@ public class Address implements Serializable {
     private String city;
     private String postalAddress;
     private String street;
-    @OneToOne
+    
+    @OneToOne(mappedBy = "address")
     private Person person;
 
     public String getCountry() {
@@ -38,7 +39,7 @@ public class Address implements Serializable {
         return person;
     }
 
-    public void setPerson(Person person) {
+    public void setResident(Person person) {
         this.person = person;
     }
 

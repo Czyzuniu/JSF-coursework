@@ -10,25 +10,18 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotNull;
 
 /**
  *
- * @author Konrad
+ * @author Czyzuniu
  */
 @Entity
-public class Contact implements Serializable {
+public class PersonContact implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-   
-    @ManyToOne
-    private Person person;
-    
-    @ManyToOne
-    private Person contact;
 
     public Long getId() {
         return id;
@@ -37,23 +30,6 @@ public class Contact implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
-    }
-    
-    public Person getContact() {
-        return contact;
-    }
-
-    public void setContact(Person contact) {
-        this.contact = contact;
-    }
-
 
     @Override
     public int hashCode() {
@@ -65,10 +41,10 @@ public class Contact implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Contact)) {
+        if (!(object instanceof PersonContact)) {
             return false;
         }
-        Contact other = (Contact) object;
+        PersonContact other = (PersonContact) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -77,7 +53,7 @@ public class Contact implements Serializable {
 
     @Override
     public String toString() {
-        return "online.diary.ents.Contact[ id=" + id + " ]";
+        return "online.diary.ents.PersonContact[ id=" + id + " ]";
     }
     
 }

@@ -82,7 +82,6 @@ public class PersonService {
             return "";
         }
     }
-
     
     public List<Person> findPersonByUsernameAndPassword(String userName, String password) throws PersonException{
         List<Person> results = pf.findPersonByUsernameAndPassword(userName, password);
@@ -97,11 +96,23 @@ public class PersonService {
         return results;
     }
     
-    public Contact addToContacts(Person person, Contact contact) {
-        //check duplicates later
-        
+    public Contact addToContacts(Contact contact) {
+        //check duplicates later        
         contactFacade.create(contact);
-        person.getContacts().add(contact);
+       
         return contact;
+    }
+    
+    public List<Contact> getPersonContacts(Person person) {
+        return pf.getPersonContacts(person);
+    }
+    
+    public Person updateUser(Person person) {
+        pf.edit(person);
+        return person;
+    }
+    
+    public List<Person> searchForPerson(String search) {
+        return pf.searchForPerson(search);
     }
 }

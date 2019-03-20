@@ -31,8 +31,10 @@ public class Person implements Serializable {
     private String password;
     private String emailAddress;
     private String phoneNumber;
-    @OneToMany
-    List<Contact>contacts;
+    
+    @OneToMany(mappedBy = "contact")
+    private List<Contact>contacts;
+
     @OneToOne
     private Address address;
 

@@ -15,6 +15,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.faces.event.AjaxBehaviorEvent;
 import online.diary.ents.Person;
 import javax.inject.Named;
 import online.diary.bus.PersonException;
@@ -35,6 +36,7 @@ public class PersonController {
     private Person currentUser = new Person();
     private String repeatPassword = "";
     private List<Person> allUsers = new ArrayList();
+    private String searchValue = "";
     
     @EJB
     private PersonService personService;
@@ -49,6 +51,15 @@ public class PersonController {
     public Address getAddress() {
         return address;
     }
+
+    public String getSearchValue() {
+        return searchValue;
+    }
+
+    public void setSearchValue(String searchValue) {
+        this.searchValue = searchValue;
+    }
+    
 
     public void setAddress(Address address) {
         this.address = address;
@@ -99,13 +110,12 @@ public class PersonController {
         this.addressService = addressService;
     }
     
-    
     public String registerUser() {
         String responseView = "";
         try {
-            Person registeredPerson = personService.registerUser(newUser); 
-            registeredPerson.setAddress(addressService.createAddress(address));
-            responseView = "login";
+            newUser.setAddress(addressService.createAddress(address));
+            personService.registerUser(newUser); 
+            responseView = "/login.xhtml?faces-redirect=true";
         } catch (PersonException ex) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(ex.getMessage()));
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
@@ -115,7 +125,18 @@ public class PersonController {
            
     
     public String goToRegister() {    
+        newUser = new Person();
+        address = new Address();
         return "/register.xhtml?faces-redirect=true";
+    }
+    
+    public String searchForPerson() throws PersonException {
+        if (searchValue.equals("")) {
+            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+        } else {
+            allUsers = personService.searchForPerson(searchValue);   
+        }
+        return "";
     }
     
     
@@ -150,17 +171,18 @@ public class PersonController {
         }
         try {
             allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+            currentUser.setContacts(personService.getPersonContacts(currentUser));
             
         } catch (PersonException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public String addToContacts(Person person) {
+    public String addToContacts(Person personToAdd) {
         Contact contact = new Contact();
         contact.setPerson(currentUser);
-        contact.setContact(person);
-        personService.addToContacts(currentUser, contact);
+        contact.setContact(personToAdd);
+        currentUser.getContacts().add(personService.addToContacts(contact));
         return "";
     }
     
@@ -171,6 +193,8 @@ public class PersonController {
     }
     
     public String editUser() {
+        personService.updateUser(currentUser);
+        addressService.updateAddress(currentUser.getAddress());
         return "/home.xhtml?faces-redirect=true";
     }
 }

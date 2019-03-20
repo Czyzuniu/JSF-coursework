@@ -11,6 +11,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import online.diary.ents.Person;
 import java.util.List;
+import online.diary.ents.Contact;
 
 /**
  *
@@ -40,9 +41,26 @@ public class PersonFacade extends AbstractFacade<Person> {
     }
     
     public List<Person> getAllUsersWithoutLoggedUser(String username) {
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName != :userName", Person.class);
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName != :userName ", Person.class);
         query.setParameter("userName", username);
         return query.getResultList();
+    }
+    
+    public List<Person> searchForPerson(String search) {
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName LIKE :search OR p.firstName LIKE :search OR p.lastName LIKE :search OR p.emailAddress LIKE :search OR p.phoneNumber LIKE :search", Person.class);
+        
+        
+//        SELECT a, b FROM Author a JOIN a.books b
+
+        query.setParameter("search", "%" + search + "%");
+        return query.getResultList();
+    }
+    
+    public List<Contact> getPersonContacts(Person person) {
+        TypedQuery<Contact> query = em.createQuery("SELECT c FROM Contact c WHERE c.person.id = :personId", Contact.class);
+        query.setParameter("personId", person.getId());
+        List<Contact> results = query.getResultList();
+        return results;
     }
     
    
