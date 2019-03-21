@@ -15,44 +15,84 @@
     </f:metadata>
     
     <h:body>
-      <ui:include src="navbar.xhtml"/>
-        
-        <h:form>
-            <h:panelGroup layout="block" class="main">                
-                <h:panelGroup layout="block" class="collection" id="appointmentList">
-
-                </h:panelGroup>
-                <h:panelGroup layout="block" id="bookAppointmentContainer">
-                    <h:commandLink class="waves-effect waves-light btn-large grey darken-1" >
-                        Book appointment
-                    </h:commandLink>
+        <h:outputStylesheet library="css" name="snackbar.min.css"  />
+        <ui:include src="navbar.xhtml"/>
+        <h:form id="appointmentsForm">
+            <h:panelGroup layout="block" class="main">
+                <h:panelGroup layout="block" class="collection collapsible" id="appointList">
+                    <ui:repeat value="#{personController.currentUser.appointments}" var="appointment">
+                        <li class="collection-item inherit">
+                            <h:panelGroup  layout="block" class="collapsible-header">
+                                <p>#{appointment.id}</p>
+                                <p>#{appointment.description}</p>
+                                <p>#{appointment.owner.firstName} #{appointment.owner.lastName}</p>
+                            </h:panelGroup>
+                            <h:panelGroup layout="block" class="collapsible-body">
+                                <h:outputText>Body</h:outputText>
+                            </h:panelGroup>
+                        </li>
+                    </ui:repeat>  
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        
-        
-   
+         <h:outputScript library="js" name="snackbar.min.js" />
+         
+    <div id="deleteDialog" class="modal">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
     </h:body>
     
     
     <style>
-       
+        
+        .wrapper {
+            display:flex;
+            justify-content:center;
+            align-items: center;
+        }
+        
+        .collection .collection-item.active {
+            background-color: white;
+            color: black;
+            border: none;
+        }
+        
+        .collapsible-header {
+            background-color: white;
+            color: black;
+            border:none;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .collapsible-body {
+            border:none;
+        }
         
         .main {
-            width: 90%;
             height: 90%;
             margin: 10px;
             display: flex;
             flex-direction: column;
+            list-style-type: none;
         }
         
-        #bookAppointmentContainer {
-            align-items: center;
-            justify-content: center;
-            display: flex;
+        
+        .collection {
+            overflow: auto;
         }
         
-       
+        .searchBox {
+            width: 35%;
+            align-self: flex-end;
+            margin-right: 15px;
+        }
         
         .personRow {
             display: inline-flex;
@@ -61,4 +101,11 @@
             align-items: center;
         }
     </style>
+    
+    <script>
+        window.addEventListener('DOMContentLoaded', function() {
+           let elems = document.querySelectorAll('.collapsible');
+           let instances = M.Collapsible.init(elems, {});
+         });
+    </script>
 </html>

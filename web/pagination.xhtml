@@ -3,17 +3,17 @@
                 xmlns:h="http://xmlns.jcp.org/jsf/html">
 
 
-                <h:panelGroup layout="block" class="paginationContainer">
-                    <ul class="pagination">
-                      <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
-                      <li class="active"><a href="#!">1</a></li>
-                      <li class="waves-effect"><a href="#!">2</a></li>
-                      <li class="waves-effect"><a href="#!">3</a></li>
-                      <li class="waves-effect"><a href="#!">4</a></li>
-                      <li class="waves-effect"><a href="#!">5</a></li>
-                      <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
-                    </ul>
-                </h:panelGroup>
+        <h:panelGroup layout="block" class="paginationContainer" rendered="#{!personController.allUsers.isEmpty()}">
+            <ul class="pagination">
+              <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+              <li class="active"><a href="#!">1</a></li>
+              <li class="waves-effect"><a href="#!">2</a></li>
+              <li class="waves-effect"><a href="#!">3</a></li>
+              <li class="waves-effect"><a href="#!">4</a></li>
+              <li class="waves-effect"><a href="#!">5</a></li>
+              <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+        </h:panelGroup>
     
     <style>
         .paginationContainer {

@@ -8,9 +8,11 @@ package online.diary.ents;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
@@ -20,6 +22,10 @@ import javax.persistence.OneToOne;
  */
 @Entity
 public class Person implements Serializable {
+
+    @OneToMany(mappedBy = "owner")
+    @ManyToMany(mappedBy = "guests", fetch=FetchType.EAGER)
+    private List<Appointment> appointments;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -32,11 +38,21 @@ public class Person implements Serializable {
     private String emailAddress;
     private String phoneNumber;
     
-    @OneToMany(mappedBy = "contact")
+    @OneToMany(mappedBy = "contact", fetch=FetchType.EAGER)
     private List<Contact>contacts;
 
     @OneToOne
     private Address address;
+
+    public List<Appointment> getAppointments() {
+        return appointments;
+    }
+
+    public void setAppointments(List<Appointment> appointments) {
+        this.appointments = appointments;
+    }
+    
+    
 
     public String getFirstName() {
         return firstName;

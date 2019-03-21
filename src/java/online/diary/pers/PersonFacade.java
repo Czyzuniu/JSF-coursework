@@ -5,12 +5,14 @@
  */
 package online.diary.pers;
 
+import java.util.ArrayList;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import online.diary.ents.Person;
 import java.util.List;
+import java.util.Objects;
 import online.diary.ents.Contact;
 
 /**
@@ -40,19 +42,48 @@ public class PersonFacade extends AbstractFacade<Person> {
         return query.getResultList();
     }
     
-    public List<Person> getAllUsersWithoutLoggedUser(String username) {
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName != :userName ", Person.class);
-        query.setParameter("userName", username);
-        return query.getResultList();
+    public List<Person> getAllUsersWithoutLoggedUser(Person person) {
+        TypedQuery<Person> query;
+        
+        List<Person> toRemove = new ArrayList<>();
+ 
+        query = em.createQuery("SELECT p FROM Person p LEFT JOIN p.contacts c WHERE p.userName != :userName", Person.class);
+
+        query.setParameter("userName", person.getUserName());
+    
+        List<Person> results = query.getResultList();
+        
+        List<Contact> contacts = getPersonContacts(person);
+
+        
+        results.forEach((r) -> {
+            contacts.forEach((c) -> {
+                if (Objects.equals(c.getContact().getId(), r.getId())) {
+                    toRemove.add(r);
+                }
+            });
+        }); 
+        
+        results.removeAll(toRemove);
+        
+        System.out.println(results);
+
+        
+        return results;
     }
     
     public List<Person> searchForPerson(String search) {
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName LIKE :search OR p.firstName LIKE :search OR p.lastName LIKE :search OR p.emailAddress LIKE :search OR p.phoneNumber LIKE :search", Person.class);
-        
-        
-//        SELECT a, b FROM Author a JOIN a.books b
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.firstName LIKE :search OR p.lastName LIKE :search OR p.emailAddress LIKE :search OR p.phoneNumber LIKE :search", Person.class);
 
         query.setParameter("search", "%" + search + "%");
+        return query.getResultList();
+    }
+    
+    public List<Person> searchForContact(Person person, String search) {
+        TypedQuery<Person> query = em.createQuery("SELECT ref from Contact c JOIN c.contact ref WHERE c.person.id = :personId "
+                + "AND (ref.firstName LIKE :search OR ref.lastName LIKE :search OR ref.emailAddress LIKE :search OR ref.phoneNumber LIKE :search)", Person.class);
+        query.setParameter("search", "%" + search + "%");
+        query.setParameter("personId", person.getId());
         return query.getResultList();
     }
     

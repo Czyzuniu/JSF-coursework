@@ -6,10 +6,15 @@
 package online.diary.ents;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 
 /**
  *
@@ -21,10 +26,66 @@ public class Appointment implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    private String description;
+    private Date startTime;
+    private Date finishTime;
+    @ManyToOne
+    private Person owner;
+    
+    @ManyToMany
+    private List<Person>guests ;
+
+    public Appointment() {
+        guests = new ArrayList<>();
+    }
+    
 
     public Long getId() {
         return id;
     }
+
+    public List<Person> getGuests() {
+        return guests;
+    }
+
+    public void setGuests(List<Person> guests) {
+        this.guests = guests;
+    }
+    
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }    
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getFinishTime() {
+        return finishTime;
+    }
+
+    public void setFinishTime(Date finishTime) {
+        this.finishTime = finishTime;
+    }
+
+    public Person getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Person owner) {
+        this.owner = owner;
+    }
+    
+    
 
     public void setId(Long id) {
         this.id = id;

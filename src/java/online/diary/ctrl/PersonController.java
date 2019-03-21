@@ -12,8 +12,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import online.diary.ents.Person;
@@ -36,7 +36,6 @@ public class PersonController {
     private Person currentUser = new Person();
     private String repeatPassword = "";
     private List<Person> allUsers = new ArrayList();
-    private String searchValue = "";
     
     @EJB
     private PersonService personService;
@@ -51,15 +50,6 @@ public class PersonController {
     public Address getAddress() {
         return address;
     }
-
-    public String getSearchValue() {
-        return searchValue;
-    }
-
-    public void setSearchValue(String searchValue) {
-        this.searchValue = searchValue;
-    }
-    
 
     public void setAddress(Address address) {
         this.address = address;
@@ -130,7 +120,8 @@ public class PersonController {
         return "/register.xhtml?faces-redirect=true";
     }
     
-    public String searchForPerson() throws PersonException {
+    public String searchForPerson(AjaxBehaviorEvent event) throws PersonException {
+        String searchValue = (String) ((UIOutput) event.getSource()).getValue();
         if (searchValue.equals("")) {
             allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
         } else {
@@ -148,6 +139,8 @@ public class PersonController {
             results = personService.findPersonByUsernameAndPassword(currentUser.getUserName(), currentUser.getPassword());
             if (!results.isEmpty()) {
                 currentUser = results.get(0);
+                FacesContext context = FacesContext.getCurrentInstance();
+                context.getExternalContext().getSessionMap().put("loggedUser", currentUser);
                 isAuthenticated = true;
             } 
         } catch (PersonException ex) {
@@ -165,10 +158,6 @@ public class PersonController {
     
     
     public void onPageLoad(){
-        
-        if (currentUser.getContacts() != null) {
-            System.out.println(currentUser.getContacts().size());   
-        }
         try {
             allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
             currentUser.setContacts(personService.getPersonContacts(currentUser));
@@ -178,13 +167,35 @@ public class PersonController {
         }
     }
     
-    public String addToContacts(Person personToAdd) {
+    public String addToContacts(Person personToAdd) throws PersonException {
         Contact contact = new Contact();
         contact.setPerson(currentUser);
         contact.setContact(personToAdd);
         currentUser.getContacts().add(personService.addToContacts(contact));
+        
+        
+        //refresh the users list
+        allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+       
         return "";
     }
+    
+    
+    public String removeFromContacts(Contact contact) throws PersonException {
+        
+        System.out.println(contact);
+        System.out.println("Here");
+        
+        
+        personService.removeFromContacts(contact);
+        currentUser.getContacts().remove(contact);
+        
+        //refresh the users list
+        allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+       
+        return "";
+    }
+    
     
     public String signOut() {
         currentUser = new Person();

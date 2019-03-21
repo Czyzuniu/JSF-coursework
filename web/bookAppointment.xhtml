@@ -1,16 +1,168 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
-    <head>
-        <title>TODO supply a title</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    </head>
-    <body>
-        <div>TODO write content</div>
-    </body>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+     
+    <h:head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    </h:head>
+    
+    <h:body>
+        <ui:include src="navbar.xhtml"/>
+        <h:form id="bookAppointment">
+            <h:panelGroup layout="block" class="main">
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="appointmentDesc" value="Appointment description *" class="validate"/>
+                        <h:inputText  id="appointmentDesc" value="#{appointmentController.appointment.description}"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="appointmentDate" value="Appointment date *" class="validate"/>
+                        <h:inputText  id="appointmentDate" class="datepicker" value="#{appointmentController.appointmentDate}" />
+                    </h:panelGroup>
+                </h:panelGroup>
+                
+                <h:panelGroup layout="block" class="row inputContainer inlineRow">
+                    <h:panelGroup layout="block" class="input-field inlineInput">
+                        <h:outputLabel for="startTime" value="Start time *" class="validate"/>
+                        <h:inputText class="timepicker" id="startTime" value="#{appointmentController.appointment.startTime}">
+                            <f:convertDateTime pattern="HH:mm" type="time" timeZone="Europe/London" />
+                        </h:inputText>
+                    </h:panelGroup>
+                     <h:panelGroup layout="block" class="input-field inlineInput">
+                        <h:outputLabel for="finishTime" value="Finish time *" class="validate"/>
+                        <h:inputText class="timepicker" id="finishTime" value="#{appointmentController.appointment.finishTime}">
+                            <f:convertDateTime pattern="HH:mm" type="time"  timeZone="Europe/London"/>
+                        </h:inputText>
+                    </h:panelGroup>
+                </h:panelGroup>
+            </h:panelGroup>
+            <h:panelGroup layout="block" class="guestColumn">
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <i class="material-icons prefix">search</i>
+                        <h:outputLabel for="guestSearch" value="Appointment guests" class="active"/>
+                        <h:inputText  id="guestSearch" class="active" >
+                            <f:ajax listener="#{appointmentController.searchForContact}" event='keyup' render="personList" />
+                        </h:inputText>
+                    </h:panelGroup>
+                </h:panelGroup>
+                <h:panelGroup layout="block" id="personList" class="collection" >
+                    <ui:repeat value="#{appointmentController.contactList}" var="contact">
+                        <h:panelGroup class="collection-item personRow">
+                            <p>#{contact.firstName}</p>
+                            <p>#{contact.lastName}</p>
+                            <p>#{contact.emailAddress}</p>
+                            <p>#{contact.phoneNumber}</p>
+                            <i class="small material-icons" style="color:green; cursor: pointer">add_circle
+                                <f:ajax listener="#{appointmentController.addToGuestList(contact)}" event='click' render=":bookAppointment:guestList" />
+                            </i>
+                        </h:panelGroup>
+                    </ui:repeat>  
+                </h:panelGroup>
+                <h:panelGroup layout="block" class="collection"  id="guestList">
+                    <h5>Added guests</h5>
+                    <ui:repeat value="#{appointmentController.appointment.guests}" var="guest">
+                        <h:panelGroup class="collection-item personRow">
+                            <p>#{guest.firstName}</p>
+                            <p>#{guest.lastName}</p>
+                            <i class="small material-icons" style="color:red; cursor: pointer">remove_circle
+                                <f:ajax listener="#{appointmentController.removeFromGuestList(guest)}" event='click' render=":bookAppointment:guestList" />
+                            </i>
+                        </h:panelGroup>
+                    </ui:repeat>  
+                </h:panelGroup>
+            </h:panelGroup>
+        <h:panelGroup class="bookContainer">
+            <h:messages style="color:red" id="messages"/>
+            <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{appointmentController.createAppointment()}">
+                 <i class="material-icons right">chevron_right</i>Book appointment
+             </h:commandLink>
+        </h:panelGroup>
+        </h:form>
+    </h:body>
+    
+    
+    <style>
+        #bookAppointment {
+            background-color:white;
+            height:80vh;
+            width:100%;
+            overflow:hidden;
+            display:flex;
+            justify-content: center;
+            flex-direction: row;
+        }
+        
+        .bookContainer {
+            display: flex;
+            justify-content: center;
+        }
+        
+        .guestColumn {
+            flex:1;
+            margin-top: 25px;
+        }
+        
+        .main {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex:1
+        }
+        
+        .inlineRow {
+            display:flex;
+            justify-content: center;
+        }
+        
+        .inlineInput {
+            width:50%;
+        }
+        
+        .inputContainer {
+            width:75%;
+            display:flex;
+        }
+        
+        .inputLabel {
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+        
+        .input-field {
+            margin:5px;
+            width:100%;
+        }
+        
+        .personRow {
+            display: inline-flex;
+            justify-content: space-around;
+            width: 100%;
+            align-items: center;
+        }
+        
+        h5 {
+            text-align: center;
+        }
+    </style>
+    
+    
+    <script>
+        window.addEventListener('load', () => {
+            //time pickers
+            let elems = document.querySelectorAll('.timepicker');
+            let instances = M.Timepicker.init(elems, {format:"HH:mm", twelveHour:false});
+            
+            //date picker
+            M.Datepicker.init(document.querySelectorAll('.datepicker'), {format:"dd-mm-yyyy"});
+        })
+    </script>
 </html>

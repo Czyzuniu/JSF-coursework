@@ -15,9 +15,9 @@
     </f:metadata>
     
     <h:body>
+        <h:outputStylesheet library="css" name="snackbar.min.css"  />
         <ui:include src="navbar.xhtml"/>
-        
-        <h:form>
+        <h:form id="contactForm">
             <h:panelGroup layout="block" class="main">
                 <h:panelGroup layout="block" class="input-field searchBox">
                     <i class="material-icons prefix">search_circle</i>
@@ -25,21 +25,31 @@
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="collection">
-                    <ui:repeat value="#{personController.currentUser.contacts}" var="user">
+                    <ui:repeat value="#{personController.currentUser.contacts}" var="contact">
                         <h:panelGroup class="collection-item personRow">
-                            <p>#{user.contact.firstName}</p>
-                            <p>#{user.contact.lastName}</p>
-                            <p>#{user.contact.emailAddress}</p>
-                            <p>#{user.contact.phoneNumber}</p>
-                            <i class="small material-icons" style="color:red">delete_forever</i>
+                            <p>#{contact.contact.firstName}</p>
+                            <p>#{contact.contact.lastName}</p>
+                            <p>#{contact.contact.emailAddress}</p>
+                            <p>#{contact.contact.phoneNumber}</p>
+                            <i class="small material-icons" style="color:red; cursor: pointer" onclick="Snackbar.show({pos: 'bottom-center', text:'Deleted from contacts!'});">delete_forever
+                                <f:ajax listener="#{personController.removeFromContacts(contact)}" event="click" render="contactForm" />
+                            </i>
                         </h:panelGroup>
                     </ui:repeat>  
                 </h:panelGroup>
             </h:panelGroup>
         </h:form>
-        
-        
-   
+         <h:outputScript library="js" name="snackbar.min.js" />
+         
+    <div id="deleteDialog" class="modal">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
     </h:body>
     
     

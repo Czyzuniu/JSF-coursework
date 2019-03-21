@@ -3,18 +3,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
     xmlns:ui="http://java.sun.com/jsf/facelets">
-     
-    <h:head>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
-        <script
-                src="http://code.jquery.com/jquery-3.3.1.min.js"
-                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
-                crossorigin="anonymous">
-        </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/snackbarjs/1.1.0/snackbar.min.js" />
-    </h:head>
+
     
     <f:metadata>
         <f:viewAction action="#{personController.onPageLoad}" />
@@ -25,28 +14,30 @@
       <ui:include src="navbar.xhtml"/>
         <h:form id="homeForm">
             <h:panelGroup layout="block" class="main">
-                <h:panelGroup layout="block" class="input-field searchBox">
-                    <i class="material-icons prefix">search_circle</i>
-                    <h:inputText  id="searchField" a:placeholder="Search..." value="#{personController.searchValue}">
-                       <f:ajax listener="#{personController.searchForPerson()}" render="personList" />
-                    </h:inputText>
-                </h:panelGroup>
+                    <h:panelGroup layout="block" class="input-field">
+                        <i class="material-icons prefix">search</i>
+                        <h:outputLabel for="search" value="Search users" class="active"/>
+                        <h:inputText  id="search" class="active" >
+                            <f:ajax listener="#{personController.searchForPerson}" event='keyup' render="personList" />
+                        </h:inputText>
+                    </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="collection" id="personList">
-                <ui:repeat value="#{personController.allUsers}" var="user">
-                    <h:panelGroup class="collection-item personRow">
-                        <p>#{user.firstName}</p>
-                        <p>#{user.lastName}</p>
-                        <p>#{user.emailAddress}</p>
-                        <p>#{user.phoneNumber}</p>
-                        <h:commandLink value="Add to contacts" onclick="Snackbar.show({pos: 'bottom-center', text:'Added to contacts!'}); //Set the position" class="waves-effect waves-light btn-small grey darken-1">
-                            <f:ajax listener="#{personController.addToContacts(user)}" render="mainForm" />
-                        </h:commandLink>
-                    </h:panelGroup>
-                </ui:repeat>  
+                    <ui:repeat value="#{personController.allUsers}" var="user">
+                        <h:panelGroup class="collection-item personRow">
+                            <p>#{user.firstName}</p>
+                            <p>#{user.lastName}</p>
+                            <p>#{user.emailAddress}</p>
+                            <p>#{user.phoneNumber}</p>
+                            <h:commandLink value="Add to contacts" onclick="Snackbar.show({pos: 'bottom-center', text:'Added to contacts!'});" class="waves-effect waves-light btn-small grey darken-1" >
+                                <f:ajax listener="#{personController.addToContacts(user)}" render="homeForm" />
+                            </h:commandLink>
+                        </h:panelGroup>
+                    </ui:repeat>  
                 </h:panelGroup>
                 <ui:include src="pagination.xhtml"/>
             </h:panelGroup>
+            <!--<ui:include src="footer.xhtml"/>-->
         </h:form>
       <h:outputScript library="js" name="snackbar.min.js" />
     </h:body>

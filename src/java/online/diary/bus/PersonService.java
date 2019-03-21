@@ -91,8 +91,11 @@ public class PersonService {
         return results;
     }
     
-    public List<Person> getAllUsersWithoutLoggedUser(Person currentUser) throws PersonException{
-        List<Person> results = pf.getAllUsersWithoutLoggedUser(currentUser.getUserName());
+    public List<Person> getAllUsersWithoutLoggedUser(Person currentUser) throws PersonException {
+        
+        //filter the users which are in the contacts to not add the same user 
+        
+        List<Person> results = pf.getAllUsersWithoutLoggedUser(currentUser);
         return results;
     }
     
@@ -115,4 +118,22 @@ public class PersonService {
     public List<Person> searchForPerson(String search) {
         return pf.searchForPerson(search);
     }
+
+    public void removeFromContacts(Contact contact) {
+        contactFacade.remove(contact);
+    }
+
+    public List<Person> searchForContact(Person person, String searchValue) {
+        return pf.searchForContact(person,searchValue);
+    }
 }
+
+
+//
+//-- SELECT p1.USERNAME, p2.USERNAME  FROM PERSON p1 INNER JOIN CONTACT ON p1.ID = CONTACT.PERSON_ID INNER JOIN PERSON P2 ON CONTACT.CONTACT_ID = P2.ID
+//
+//-- SELECT P1.USERNAME, p1.ID, p2.ID, p2.USERNAME FROM PERSON p1 INNER JOIN CONTACT ON p1.ID = CONTACT.PERSON_ID INNER JOIN PERSON P2 ON CONTACT.CONTACT_ID = P2.ID WHERE p2.id not in (905)
+//
+//-- SELECT P1.USERNAME, p1.ID, CONTACT.CONTACT_ID FROM PERSON P1 LEFT OUTER JOIN CONTACT ON P1.ID = CONTACT.CONTACT_ID AND CONTACT.CONTACT_ID not in (905)
+//
+//-- SELECT * FROM PERSON EXCEPT SELECT * FROM CONTACT
