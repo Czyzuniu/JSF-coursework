@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -21,7 +22,9 @@ import javax.inject.Named;
 import online.diary.bus.PersonException;
 import online.diary.bus.PersonService;
 import online.diary.bus.AddressService;
+import online.diary.bus.AppointmentService;
 import online.diary.ents.Address;
+import online.diary.ents.Appointment;
 import online.diary.ents.Contact;
 /**
  *
@@ -42,6 +45,10 @@ public class PersonController {
     
     @EJB
     private AddressService addressService;
+    
+    @EJB
+    private AppointmentService appointmentService;
+    
 
     public String getRepeatPassword() {
         return repeatPassword;
@@ -69,13 +76,14 @@ public class PersonController {
     }
 
     public Person getCurrentUser() {
+//        currentUser = personService.reattachPerson(currentUser);
         return currentUser;
     }
 
     public void setCurrentUser(Person currentUser) {
         this.currentUser = currentUser;
     }
- 
+
     
     /**
      * Creates a new instance of PersonController
@@ -131,6 +139,11 @@ public class PersonController {
     }
     
     
+    public List<Person> getGuestForAppointment(Appointment appointment) {
+        return appointment.getGuests();
+    }
+    
+    
     public String login() {
         boolean isAuthenticated = false;
         
@@ -156,23 +169,12 @@ public class PersonController {
         return responseView;
     }
     
-    
-    public void onPageLoad(){
-        try {
-            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
-            currentUser.setContacts(personService.getPersonContacts(currentUser));
-            
-        } catch (PersonException ex) {
-            Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    
+   
     public String addToContacts(Person personToAdd) throws PersonException {
         Contact contact = new Contact();
         contact.setPerson(currentUser);
         contact.setContact(personToAdd);
         currentUser.getContacts().add(personService.addToContacts(contact));
-        
         
         //refresh the users list
         allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
@@ -182,11 +184,6 @@ public class PersonController {
     
     
     public String removeFromContacts(Contact contact) throws PersonException {
-        
-        System.out.println(contact);
-        System.out.println("Here");
-        
-        
         personService.removeFromContacts(contact);
         currentUser.getContacts().remove(contact);
         
@@ -207,5 +204,17 @@ public class PersonController {
         personService.updateUser(currentUser);
         addressService.updateAddress(currentUser.getAddress());
         return "/home.xhtml?faces-redirect=true";
+    }
+    
+    
+    public void onPageLoad() {
+        try {
+            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+            currentUser.setContacts(personService.getPersonContacts(currentUser));
+            currentUser.setAppointments(appointmentService.getAllAppointments(currentUser));
+            
+        } catch (PersonException ex) {
+            Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

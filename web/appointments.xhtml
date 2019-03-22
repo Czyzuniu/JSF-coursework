@@ -10,25 +10,56 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
     </h:head>
     
-    <f:metadata>
-        <f:viewAction action="#{personController.onPageLoad}" />
-    </f:metadata>
-    
     <h:body>
         <h:outputStylesheet library="css" name="snackbar.min.css"  />
         <ui:include src="navbar.xhtml"/>
         <h:form id="appointmentsForm">
             <h:panelGroup layout="block" class="main">
-                <h:panelGroup layout="block" class="collection collapsible" id="appointList">
+                <h:panelGroup layout="block" class="collection collapsible" id="appointList" rendered="#{not personController.currentUser.appointments.isEmpty()}">
+<!--                    <h5 style="text-align: center;">Owned Appointments</h5>-->
                     <ui:repeat value="#{personController.currentUser.appointments}" var="appointment">
                         <li class="collection-item inherit">
                             <h:panelGroup  layout="block" class="collapsible-header">
-                                <p>#{appointment.id}</p>
-                                <p>#{appointment.description}</p>
-                                <p>#{appointment.owner.firstName} #{appointment.owner.lastName}</p>
+                                <p>Appointment ID : #{appointment.id}</p>
+                                <p>Appointment Description : #{appointment.description}</p>
+                                <p>Appointment Owner : #{appointment.owner.firstName} #{appointment.owner.lastName}</p>
                             </h:panelGroup>
                             <h:panelGroup layout="block" class="collapsible-body">
-                                <h:outputText>Body</h:outputText>
+                                    <h:panelGroup layout="block" class="app-date">
+                                        <h:panelGroup layout="block" class="app-date-inner">
+                                            <h:outputText value="#{appointment.startTime}">
+                                                 <p>Appointment Date</p>
+                                                 <f:convertDateTime pattern="dd-MM-yyyy" />
+                                             </h:outputText>
+                                        </h:panelGroup>
+                                    <h:panelGroup layout="block" class="app-date-inner">
+                                        <h:outputText value="#{appointment.startTime}">
+                                            <p class="app-time">Start Time 
+                                            <f:convertDateTime pattern="HH:mm" />
+                                            </p>
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                    <h:panelGroup layout="block" class="app-date-inner">
+                                        <h:outputText value="#{appointment.finishTime}">
+                                            <p>Finish Time</p>
+                                            <f:convertDateTime pattern="HH:mm" />
+                                        </h:outputText>
+                                    </h:panelGroup>
+                                </h:panelGroup>
+                            <h:panelGroup layout="block" class="collection guestContainer" id="guestList">
+                                <h5 style="text-align:center;">Appointment guests</h5>
+                                <ui:repeat value="#{appointment.guests}" var="guest">
+                                    <h:panelGroup class="collection-item personRow">
+                                        <p>#{guest.firstName}</p>
+                                        <p>#{guest.lastName}</p>
+                                        <p>#{guest.emailAddress}</p>
+                                        <p>#{guest.phoneNumber}</p>
+                                        <h:panelGroup layout="block" rendered="#{guest.id == personController.currentUser.id}">
+                                            <i class="small material-icons">person</i>
+                                        </h:panelGroup>
+                                    </h:panelGroup>
+                                </ui:repeat>  
+                            </h:panelGroup>
                             </h:panelGroup>
                         </li>
                     </ui:repeat>  
@@ -36,16 +67,6 @@
             </h:panelGroup>
         </h:form>
          <h:outputScript library="js" name="snackbar.min.js" />
-         
-    <div id="deleteDialog" class="modal">
-      <div class="modal-content">
-        <h4>Modal Header</h4>
-        <p>A bunch of text</p>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-      </div>
-    </div>
     </h:body>
     
     
@@ -55,6 +76,10 @@
             display:flex;
             justify-content:center;
             align-items: center;
+        }
+        
+        .guestContainer {
+            margin-top: 50px !important;
         }
         
         .collection .collection-item.active {
@@ -99,6 +124,20 @@
             justify-content: space-around;
             width: 100%;
             align-items: center;
+        }
+        
+        .app-date {
+            display: flex;
+            justify-content: space-between;
+            font-size: large;
+        }
+        
+        .app-date-inner {
+            text-align: center;
+        }
+        
+        .collapsible .collection {
+            border: 1px solid #e0e0e0 !important;
         }
     </style>
     

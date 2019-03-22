@@ -126,6 +126,10 @@ public class PersonService {
     public List<Person> searchForContact(Person person, String searchValue) {
         return pf.searchForContact(person,searchValue);
     }
+    
+    public Person reattachPerson(Person p) {
+        return pf.reAttach(p);
+    }
 }
 
 

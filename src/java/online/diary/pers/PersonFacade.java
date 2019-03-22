@@ -94,6 +94,9 @@ public class PersonFacade extends AbstractFacade<Person> {
         return results;
     }
     
+    public Person reAttach(Person p) {
+        return this.edit(p);
+    }
    
     
 }

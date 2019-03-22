@@ -5,9 +5,11 @@
  */
 package online.diary.bus;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import online.diary.ents.Appointment;
+import online.diary.ents.Person;
 import online.diary.pers.AppointmentFacade;
 
 /**
@@ -24,4 +26,10 @@ public class AppointmentService {
         appointmentFacade.create(appointment);
         return appointment;
     }
+    
+    public List<Appointment> getAllAppointments(Person p) {
+        return appointmentFacade.getAllAppointments(p);
+    }    
+    
+    
 }

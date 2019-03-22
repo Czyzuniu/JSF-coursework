@@ -33,7 +33,7 @@ import online.diary.ents.Person;
 public class AppointmentController implements Serializable {
 
     private List<Person> contactList = new ArrayList<>();
-    private Appointment appointment = new Appointment();
+    private Appointment appointment;
     private String appointmentDate = "";
 
     
@@ -44,8 +44,10 @@ public class AppointmentController implements Serializable {
     private AppointmentService appointmentService;
     
     public AppointmentController() {
-
+       appointment = new Appointment();
     }
+    
+    
 
     public String getAppointmentDate() {
         return appointmentDate;
@@ -62,12 +64,12 @@ public class AppointmentController implements Serializable {
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
+   
     
-    
-
     public Appointment getAppointment() {
         return appointment;
     }
+   
 
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
@@ -108,8 +110,6 @@ public class AppointmentController implements Serializable {
     
     public String createAppointment() throws ParseException {
         appointment.setOwner(getLoggedUser());
-        getLoggedUser().getAppointments().add(appointmentService.createAppointment(appointment));
-
         
         DateFormat timeFormat = new SimpleDateFormat("HH:mm"); 
         String startTime = timeFormat.format(appointment.getStartTime());
@@ -120,6 +120,8 @@ public class AppointmentController implements Serializable {
         appointment.setStartTime(finalFormat.parse(appointmentDate + " " + startTime));
         appointment.setFinishTime(finalFormat.parse(appointmentDate + " " + finishTime));
         
+        getLoggedUser().getAppointments().add(appointmentService.createAppointment(appointment));
+
         
         return "";
     }

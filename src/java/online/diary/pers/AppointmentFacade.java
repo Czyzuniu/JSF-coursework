@@ -5,10 +5,13 @@
  */
 package online.diary.pers;
 
+import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import online.diary.ents.Appointment;
+import online.diary.ents.Person;
 
 /**
  *
@@ -27,5 +30,10 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
     public AppointmentFacade() {
         super(Appointment.class);
     }
-    
+
+    public List<Appointment> getAllAppointments(Person p) {
+        TypedQuery<Appointment> query = em.createQuery("SELECT DISTINCT a from Appointment a JOIN a.guests g WHERE a.owner.id = :personId OR g.id = :personId", Appointment.class);
+        query.setParameter("personId", p.getId());
+        return query.getResultList();
+    }    
 }
