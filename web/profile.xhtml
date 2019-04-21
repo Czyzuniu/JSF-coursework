@@ -10,49 +10,63 @@
     </h:head>
     
     <h:body>
-        <ui:include src="navbar.xhtml"/>
         <h:form id="registerForm">
             <h:panelGroup layout="block" class="main">
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="userName" value="Username *" class="validate"/>
-                        <h:inputText  id="userName" value="#{personController.currentUser.userName}"/>
+                        <h:inputText  id="userName" value="#{personController.currentUser.userName}" required="true" requiredMessage="This field cannot be empty" validatorMessage="The username must have at least 6 alphanumeric characters">
+                            <f:validateRegex pattern = "^[a-zA-Z0-9]{6,}$" />
+                        </h:inputText>
+                        <h:message for = "userName" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
-                                
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="firstName" value="First name *" class="validate"/>
-                        <h:inputText  id="firstName" value="#{personController.currentUser.firstName}"/>
+                        <h:inputText  id="firstName" value="#{personController.currentUser.firstName}" required="true" requiredMessage="This field cannot be empty" validatorMessage="Names can contain only letters">
+                            <f:validateRegex pattern="[a-zA-Z]+"/>
+                        </h:inputText>
+                        <h:message for = "firstName" style = "color:red" />
                     </h:panelGroup>
                      <h:panelGroup layout="block" class="input-field">
-                        <h:outputLabel for="lastName" value="Last name *" class="validate"/>
-                        <h:inputText  id="lastName" value="#{personController.currentUser.lastName}"/>
+                         <h:outputLabel for="lastName" value="Last name *" class="active"/>
+                        <h:inputText  id="lastName" value="#{personController.currentUser.lastName}" required="true" requiredMessage="This field cannot be empty" validatorMessage="Names can contain only letters">
+                            <f:validateRegex pattern="[a-zA-Z]+"/>
+                        </h:inputText>
+                         <h:message for = "lastName" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
-                        <h:outputLabel for="country" value="Country" class="validate"/>
-                        <h:inputText  id="country"/>
+                        <h:selectOneMenu id="countries" value="#{personController.currentUser.address.country}">
+                            <f:selectItems value="#{personController.getCountries()}" var="country" itemValue="#{country.getCountry()}" itemLabel="#{country.getDisplayCountry()}" />
+                        </h:selectOneMenu>
+                    <h:outputLabel for="country" value="Country" class="validate"/>
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="street" value="Street" class="validate"/>
-                        <h:inputText  id="street" value="#{personController.currentUser.address.street}"/>
+                        <h:inputText  id="street" value="#{personController.currentUser.address.street}">
+                        </h:inputText>
                     </h:panelGroup>
                      <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="city" value="City" class="validate"/>
-                        <h:inputText  id="city" value="#{personController.currentUser.address.city}"/>
+                        <h:inputText  id="city" value="#{personController.currentUser.address.city}">
+                            <h:message for = "city" style = "color:red" />
+                        </h:inputText>
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="postal" value="Postal / Zip code" class="validate" />
-                        <h:inputText  id="postal" value="#{personController.currentUser.address.postalAddress}"/>
+                        <h:inputText  id="postal" value="#{personController.currentUser.address.postalAddress}">
+                        </h:inputText>
+                    <h:message for="postalAddressException" style="color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
 
@@ -66,14 +80,16 @@
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="email" value="Email address *" class="validate" />
-                        <h:inputText  id="email" value="#{personController.currentUser.emailAddress}"/>
+                        <h:inputText  id="email" value="#{personController.currentUser.emailAddress}"  required="true" requiredMessage="This field cannot be empty" validatorMessage="The email is not valid">
+                             <f:validateRegex pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"/>
+                        </h:inputText>
+                        <h:message for = "email" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
             </h:panelGroup>
-           <h:messages style="color:red" id="messages"/>
-                <h:commandLink class="waves-effect waves-light btn-small grey darken-1" action="#{personController.editUser()}">
-                    <i class="material-icons right">chevron_right</i>Edit details
-                </h:commandLink>
+            <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{personController.editUser()}">
+                 <i class="material-icons right">chevron_right</i>Edit profile
+             </h:commandLink>        
         </h:form>
     </h:body>
     
@@ -81,21 +97,24 @@
     <style>
         #registerForm {
             background-color:white;
-            height:100vh;
             width:100%;
-            overflow:hidden;
+            height:100vh;
             display:flex;
             justify-content: center;
             align-items:center;
             flex-direction: column;
         }
         
+        #registerForm span {
+            position: relative;
+            top: -2.5px;
+        }
+        
         .main {
             display: flex;
+            width:50%;
             flex-direction: column;
-            width: 45%;
             align-items: center;
-            overflow: auto;
         }
         
         .inlineRow {
@@ -121,5 +140,19 @@
             margin:5px;
             width:100%;
         }
+        
+        .dropdown-content {
+            max-height: 350px !important;
+            overflow-y: auto !important;
+            backface-visibility: hidden !important;
+        }
     </style>
+    
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            let elems = document.getElementById('registerForm:countries')
+            let instances = M.FormSelect.init(elems);
+        });
+    </script>
 </html>

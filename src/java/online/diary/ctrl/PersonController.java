@@ -6,26 +6,29 @@
 package online.diary.ctrl;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import online.diary.ents.Person;
 import javax.inject.Named;
+import online.diary.bus.AddressException;
 import online.diary.bus.PersonException;
 import online.diary.bus.PersonService;
 import online.diary.bus.AddressService;
 import online.diary.bus.AppointmentService;
 import online.diary.ents.Address;
 import online.diary.ents.Appointment;
-import online.diary.ents.Contact;
 /**
  *
  * @author Konrad
@@ -39,6 +42,11 @@ public class PersonController {
     private Person currentUser = new Person();
     private String repeatPassword = "";
     private List<Person> allUsers = new ArrayList();
+    private ArrayList<Integer>pages = new ArrayList();
+    private ArrayList<Locale>countries = new ArrayList();
+    private final int viewSize = 3;
+    private int viewIndex = 1;
+
     
     @EJB
     private PersonService personService;
@@ -48,7 +56,51 @@ public class PersonController {
     
     @EJB
     private AppointmentService appointmentService;
+    @ManagedProperty("#{paginationController}")
+    private PaginationController paginationController;
+
     
+    /**
+     * Creates a new instance of PersonController
+     */
+    public PersonController() {
+         for (String countryCode:Locale.getISOCountries()) {
+             Locale country = new Locale("", countryCode);
+             countries.add(country);
+         }
+    }
+    
+    public AppointmentService getAppointmentService() {
+        return appointmentService;
+    }
+
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
+    }
+    
+
+    public PaginationController getPaginationController() {
+        return paginationController;
+    }
+
+    public void setPaginationController(PaginationController paginationController) {
+        this.paginationController = paginationController;
+    }
+  
+    
+    public boolean isPageActive(int page) {
+        return page == viewIndex;
+    }
+
+    public ArrayList<Integer> getPages() {
+        return pages;
+    }
+
+    public void setPages(ArrayList<Integer> pages) {
+        System.out.println(pages);
+        this.pages = pages;
+    }
+
 
     public String getRepeatPassword() {
         return repeatPassword;
@@ -83,16 +135,8 @@ public class PersonController {
     public void setCurrentUser(Person currentUser) {
         this.currentUser = currentUser;
     }
-
-    
-    /**
-     * Creates a new instance of PersonController
-     */
-    public PersonController() {
-
-    }
    
-       public List<Person> getAllUsers() {
+    public List<Person> getAllUsers() {
         return allUsers;
     }
 
@@ -109,18 +153,37 @@ public class PersonController {
     }
     
     public String registerUser() {
-        String responseView = "";
+        
+        if (!newUser.getPassword().equals(this.repeatPassword)) {
+            FacesContext.getCurrentInstance().addMessage("passwords", new FacesMessage("Passwords do not match"));
+            return "";
+        } 
+        
+        Address newAddress = null;
         try {
-            newUser.setAddress(addressService.createAddress(address));
-            personService.registerUser(newUser); 
-            responseView = "/login.xhtml?faces-redirect=true";
-        } catch (PersonException ex) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(ex.getMessage()));
+            newAddress = addressService.createAddress(address);
+            
+        } catch (AddressException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return responseView;
-    }
+            FacesContext.getCurrentInstance().addMessage("postalAddressException", new FacesMessage(ex.getMessage()));
+            
+            return "";
            
+            
+            //messages do not show???
+        }
+
+        newUser.setAddress(newAddress);
+        personService.registerUser(newUser); 
+       
+       
+        return "/login.xhtml?faces-redirect=true";
+    }
+          
+    
+    public boolean isGB() {
+        return address.getCountry().equals("GB");
+    }
     
     public String goToRegister() {    
         newUser = new Person();
@@ -131,11 +194,21 @@ public class PersonController {
     public String searchForPerson(AjaxBehaviorEvent event) throws PersonException {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
         if (searchValue.equals("")) {
-            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
+            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,viewSize,viewIndex);
+            allUsers = (List<Person>) results.get("users");
         } else {
-            allUsers = personService.searchForPerson(searchValue);   
+            allUsers = personService.searchForPerson(searchValue,currentUser);   
         }
         return "";
+    }
+   
+
+    public ArrayList<Locale> getCountries() {
+        return countries;
+    }
+
+    public void setCountries(ArrayList<Locale> countries) {
+        this.countries = countries;
     }
     
     
@@ -169,30 +242,6 @@ public class PersonController {
         return responseView;
     }
     
-   
-    public String addToContacts(Person personToAdd) throws PersonException {
-        Contact contact = new Contact();
-        contact.setPerson(currentUser);
-        contact.setContact(personToAdd);
-        currentUser.getContacts().add(personService.addToContacts(contact));
-        
-        //refresh the users list
-        allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
-       
-        return "";
-    }
-    
-    
-    public String removeFromContacts(Contact contact) throws PersonException {
-        personService.removeFromContacts(contact);
-        currentUser.getContacts().remove(contact);
-        
-        //refresh the users list
-        allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
-       
-        return "";
-    }
-    
     
     public String signOut() {
         currentUser = new Person();
@@ -206,13 +255,27 @@ public class PersonController {
         return "/home.xhtml?faces-redirect=true";
     }
     
+    public void changePage(int page) throws PersonException {
+        viewIndex = page;
+        HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser, viewSize,viewIndex);
+        allUsers = (List<Person>) results.get("users");
+    }
     
     public void onPageLoad() {
         try {
-            allUsers = personService.getAllUsersWithoutLoggedUser(currentUser);
-            currentUser.setContacts(personService.getPersonContacts(currentUser));
-            currentUser.setAppointments(appointmentService.getAllAppointments(currentUser));
+            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,viewSize, viewIndex);
+            allUsers = (List<Person>) results.get("users");
+            ArrayList<Integer> pageCount = new ArrayList<>();
             
+            for (int i = 0; i < (int) results.get("pages"); i++) {
+                pageCount.add(i+1);
+            }
+          
+            this.setPages(pageCount);
+            
+            
+            System.out.println(pageCount);
+            currentUser.setAppointments(appointmentService.getAllAppointments(currentUser));
         } catch (PersonException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
         }

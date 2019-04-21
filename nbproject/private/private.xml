@@ -4,26 +4,29 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ctrl/PersonController.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/myContacts.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/contacts.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/register.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/PersonFacade.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/conf/persistence.xml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/login.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/PersonContact.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/PersonService.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AddressFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/login.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/classes/NavigationItem.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/AddressService.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/navbar.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/resources/css/style.css</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/conf/MANIFEST.MF</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AppointmentFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ctrl/AppointmentController.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Contact.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/bookAppointment.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Person.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Appointment.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/WEB-INF/web.xml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/home.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AbstractFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/appointments.xhtml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/profile.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/PersonException.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Address.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ctrl/NavigationController.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/pagination.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/AppointmentService.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/footer.xhtml</file>
         </group>
     </open-files>
 </project-private>

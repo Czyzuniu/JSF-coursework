@@ -21,39 +21,54 @@
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="appointmentDesc" value="Appointment description *" class="validate"/>
-                        <h:inputText  id="appointmentDesc" value="#{appointmentController.appointment.description}"/>
+                        <h:inputText  id="appointmentDesc" value="#{appointmentController.appointment.description}" required="true" requiredMessage="This field cannot be empty">
+                        </h:inputText>
+                         <h:message for = "appointmentDesc" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="appointmentDate" value="Appointment date *" class="validate"/>
-                        <h:inputText  id="appointmentDate" class="datepicker" value="#{appointmentController.appointmentDate}" />
+                        <h:inputText  id="appointmentDate" class="datepicker" value="#{appointmentController.appointmentDate}" required="true" requiredMessage="This field cannot be empty" />
+                        <h:message for = "appointmentDate" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer inlineRow">
                     <h:panelGroup layout="block" class="input-field inlineInput">
                         <h:outputLabel for="startTime" value="Start time *" class="validate"/>
-                        <h:inputText class="timepicker" id="startTime" value="#{appointmentController.appointment.startTime}">
+                        <h:inputText class="timepicker" id="startTime" value="#{appointmentController.appointment.startTime}" required="true" requiredMessage="This field cannot be empty">
                             <f:convertDateTime pattern="HH:mm" type="time" timeZone="Europe/London" />
                         </h:inputText>
+                        <h:message for = "startTime" style = "color:red" />
                     </h:panelGroup>
                      <h:panelGroup layout="block" class="input-field inlineInput">
                         <h:outputLabel for="finishTime" value="Finish time *" class="validate"/>
-                        <h:inputText class="timepicker" id="finishTime" value="#{appointmentController.appointment.finishTime}">
+                        <h:inputText class="timepicker" id="finishTime" value="#{appointmentController.appointment.finishTime}" required="true" requiredMessage="This field cannot be empty">
                             <f:convertDateTime pattern="HH:mm" type="time"  timeZone="Europe/London"/>
                         </h:inputText>
+                        <h:message for = "finishTime" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
+                <h:panelGroup layout="block" class="row inputContainer">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:selectOneMenu id="ownerAttend" value="#{appointmentController.ownerAttending}">
+                            <f:selectItem  itemValue="true" itemLabel="Yes" />
+                            <f:selectItem  itemValue="false" itemLabel="No" />
+                        </h:selectOneMenu>
+                        <h:outputLabel for="ownerAttend" value="Is the owner attending?" class="validate"/>
+                    </h:panelGroup>
+                </h:panelGroup>
+<h:messages style="color:red;"/>
             </h:panelGroup>
-            <h:panelGroup layout="block" class="guestColumn">
+            <h:panelGroup layout="block" id="guestColumn"  class="guestColumn">
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <i class="material-icons prefix">search</i>
                         <h:outputLabel for="guestSearch" value="Appointment guests" class="active"/>
                         <h:inputText  id="guestSearch" class="active" >
-                            <f:ajax listener="#{appointmentController.searchForContact}" event='keyup' render="personList" />
+                            <f:ajax listener="#{appointmentController.searchForGuest}" event='keyup' render="personList" />
                         </h:inputText>
                     </h:panelGroup>
                 </h:panelGroup>
@@ -65,7 +80,7 @@
                             <p>#{contact.emailAddress}</p>
                             <p>#{contact.phoneNumber}</p>
                             <i class="small material-icons" style="color:green; cursor: pointer">add_circle
-                                <f:ajax listener="#{appointmentController.addToGuestList(contact)}" event='click' render=":bookAppointment:guestList" />
+                                <f:ajax listener="#{appointmentController.addToGuestList(contact)}" event='click' render=":bookAppointment:guestColumn" />
                             </i>
                         </h:panelGroup>
                     </ui:repeat>  
@@ -83,8 +98,8 @@
                     </ui:repeat>  
                 </h:panelGroup>
             </h:panelGroup>
+            
         <h:panelGroup class="bookContainer">
-            <h:messages style="color:red" id="messages"/>
             <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{appointmentController.createAppointment()}">
                  <i class="material-icons right">chevron_right</i>Book appointment
              </h:commandLink>
@@ -96,12 +111,18 @@
     <style>
         #bookAppointment {
             background-color:white;
-            height:80vh;
+            height:100vh;
             width:100%;
             overflow:hidden;
             display:flex;
             justify-content: center;
             flex-direction: row;
+            flex-wrap:wrap;
+        }
+        
+        .collection {
+            height:220px;
+            overflow:scroll;
         }
         
         .bookContainer {
@@ -110,7 +131,7 @@
         }
         
         .guestColumn {
-            flex:1;
+            width:50%;
             margin-top: 25px;
         }
         
@@ -119,7 +140,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            flex:1
+            width:50%;
         }
         
         .inlineRow {
@@ -167,6 +188,10 @@
             
             //date picker
             M.Datepicker.init(document.querySelectorAll('.datepicker'), {format:"dd-mm-yyyy"});
+            
+            
+            M.FormSelect.init(document.getElementById('bookAppointment:ownerAttend'));
         })
+   
     </script>
 </html>

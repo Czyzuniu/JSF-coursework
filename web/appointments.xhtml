@@ -15,8 +15,17 @@
         <ui:include src="navbar.xhtml"/>
         <h:form id="appointmentsForm">
             <h:panelGroup layout="block" class="main">
+                <h:panelGroup layout="block" class="input-field">
+                    <i class="material-icons prefix">search</i>
+                    <h:outputLabel for="search" value="Search appointments" class="active"/>
+                    <h:inputText  id="search" class="active" >
+                        <f:ajax listener="#{appointmentController.searchAppointment}" event='keyup' render="@all" />
+                    </h:inputText>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{personController.currentUser.appointments.isEmpty()}">
+                    <h5 style="text-align: center;"  >You do not have any appointments</h5>
+                </h:panelGroup>
                 <h:panelGroup layout="block" class="collection collapsible" id="appointList" rendered="#{not personController.currentUser.appointments.isEmpty()}">
-<!--                    <h5 style="text-align: center;">Owned Appointments</h5>-->
                     <ui:repeat value="#{personController.currentUser.appointments}" var="appointment">
                         <li class="collection-item inherit">
                             <h:panelGroup  layout="block" class="collapsible-header">

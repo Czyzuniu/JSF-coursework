@@ -6,6 +6,7 @@
 package online.diary.ents;
 
 import java.io.Serializable;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,7 +29,7 @@ public class Address implements Serializable {
     private String postalAddress;
     private String street;
     
-    @OneToOne(mappedBy = "address")
+    @OneToOne(mappedBy = "address", cascade = CascadeType.PERSIST)
     private Person person;
 
     public String getCountry() {

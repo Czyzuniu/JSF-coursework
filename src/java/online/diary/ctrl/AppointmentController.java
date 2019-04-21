@@ -12,7 +12,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Named;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
@@ -28,13 +31,17 @@ import online.diary.ents.Person;
  * @author Czyzuniu
  */
 @Named(value = "appointmentController")
-@ViewScoped
+@SessionScoped
 @ManagedBean
 public class AppointmentController implements Serializable {
 
     private List<Person> contactList = new ArrayList<>();
     private Appointment appointment;
     private String appointmentDate = "";
+    private boolean ownerAttending = true;
+    
+    @ManagedProperty(value="#{personController}")
+    private PersonController personController;
 
     
     @EJB
@@ -46,7 +53,23 @@ public class AppointmentController implements Serializable {
     public AppointmentController() {
        appointment = new Appointment();
     }
+
+    public boolean isOwnerAttending() {
+        return ownerAttending;
+    }
+
+    public PersonController getPersonController() {
+        return personController;
+    }
+
+    public void setPersonController(PersonController personController) {
+        this.personController = personController;
+    }
     
+
+    public void setOwnerAttending(boolean ownerAttending) {
+        this.ownerAttending = ownerAttending;
+    }
     
 
     public String getAppointmentDate() {
@@ -97,11 +120,22 @@ public class AppointmentController implements Serializable {
         return (Person) context.getExternalContext().getSessionMap().get("loggedUser");
     }
     
-    public String searchForContact(AjaxBehaviorEvent event) {
+    public String searchForGuest(AjaxBehaviorEvent event) {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
-        
+
         if (!searchValue.isEmpty()) {
-            contactList = personService.searchForContact(getLoggedUser(), searchValue);   
+            contactList = personService.searchForPerson(searchValue,this.getLoggedUser());
+        } else {
+            contactList.clear();
+        }
+        return "";
+    }
+    
+    public String searchForAppointment(AjaxBehaviorEvent event) {
+        String searchValue = (String) ((UIOutput) event.getSource()).getValue();
+
+        if (!searchValue.isEmpty()) {
+            this.personController.getCurrentUser().getAppointments() = appointmentService.findAppointment(searchValue,this.getLoggedUser());
         } else {
             contactList.clear();
         }
@@ -110,6 +144,8 @@ public class AppointmentController implements Serializable {
     
     public String createAppointment() throws ParseException {
         appointment.setOwner(getLoggedUser());
+        
+        appointment.setIncludeOwner(this.ownerAttending);
         
         DateFormat timeFormat = new SimpleDateFormat("HH:mm"); 
         String startTime = timeFormat.format(appointment.getStartTime());
@@ -120,15 +156,35 @@ public class AppointmentController implements Serializable {
         appointment.setStartTime(finalFormat.parse(appointmentDate + " " + startTime));
         appointment.setFinishTime(finalFormat.parse(appointmentDate + " " + finishTime));
         
-        getLoggedUser().getAppointments().add(appointmentService.createAppointment(appointment));
-
         
-        return "";
+        List<Appointment>clashingAppointments = appointmentService.checkAvailability(appointment);
+        
+        StringBuilder str = new StringBuilder(); 
+        
+        str.append("The appointment clashes for users : ");
+        
+        
+        
+        if (clashingAppointments.size() > 0) {
+            clashingAppointments.forEach((app) -> {
+//                str.append(app.)
+            });
+            
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("The appointment clashes for some user"));
+            return "bookAppointment";
+        } else {
+            getLoggedUser().getAppointments().add(appointmentService.createAppointment(appointment));
+        }
+               
+        
+        return "appointments";
+        
     }
 
     public String addToGuestList(Person p) {
        if (this.appointment.getGuests().indexOf(p) == -1) {
            this.appointment.getGuests().add(p);
+           this.contactList.remove(p);
        }
        return "";
     }

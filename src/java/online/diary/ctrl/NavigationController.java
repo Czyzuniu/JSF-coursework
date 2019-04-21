@@ -24,8 +24,8 @@ public class NavigationController {
     public NavigationController() {
         navigationItems = new ArrayList<>();
         navigationItems.add(new NavigationItem("Home", "home"));
-        navigationItems.add(new NavigationItem("My Contacts", "contacts"));
         navigationItems.add(new NavigationItem("My Appointments", "appointments"));
+        navigationItems.add(new NavigationItem("Book Appointment", "bookAppointment"));
         navigationItems.add(new NavigationItem("My Profile", "profile"));
     }
 

@@ -24,4 +24,6 @@
         <property name="driverClass" value="org.apache.derby.jdbc.ClientDriver"/>
     </jdbc-connection-pool>
     <jdbc-resource enabled="true" jndi-name="online-diary-newest" object-type="user" pool-name="derby_net_onlineDiary_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="online-diary-new-newest" object-type="user" pool-name="derby_net_onlineDiary_rootPool"/>
+    <jdbc-resource enabled="true" jndi-name="OnlineDiary" object-type="user" pool-name="derby_net_OnlineDiary_rootPool"/>
 </resources>

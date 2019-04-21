@@ -5,6 +5,8 @@
  */
 package online.diary.bus;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -30,6 +32,10 @@ public class AppointmentService {
     public List<Appointment> getAllAppointments(Person p) {
         return appointmentFacade.getAllAppointments(p);
     }    
+    
+    public List<Appointment> checkAvailability(Appointment appointment) {
+        return appointmentFacade.checkAvailability(appointment);
+    }
     
     
 }

@@ -29,9 +29,6 @@
                             <p>#{user.lastName}</p>
                             <p>#{user.emailAddress}</p>
                             <p>#{user.phoneNumber}</p>
-                            <h:commandLink value="Add to contacts" onclick="Snackbar.show({pos: 'bottom-center', text:'Added to contacts!'});" class="waves-effect waves-light btn-small grey darken-1" >
-                                <f:ajax listener="#{personController.addToContacts(user)}" render="homeForm" />
-                            </h:commandLink>
                         </h:panelGroup>
                     </ui:repeat>  
                 </h:panelGroup>

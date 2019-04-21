@@ -30,6 +30,7 @@ public class Appointment implements Serializable {
     private String description;
     private Date startTime;
     private Date finishTime;
+    private boolean includeOwner;
     @ManyToOne
     private Person owner;
     
@@ -38,6 +39,14 @@ public class Appointment implements Serializable {
 
     public Appointment() {
         
+    }
+
+    public boolean isIncludeOwner() {
+        return includeOwner;
+    }
+
+    public void setIncludeOwner(boolean includeOwner) {
+        this.includeOwner = includeOwner;
     }
     
 

@@ -18,7 +18,8 @@
                     <h:panelGroup layout="block" class="input-field">
                         <i class="material-icons prefix">account_circle</i>
                         <h:outputLabel for="userName" value="Username" class="validate"/>
-                        <h:inputText  id="userName" value="#{personController.currentUser.userName}"/>
+                        <h:inputText  id="userName" value="#{personController.currentUser.userName}" />
+                        
                     </h:panelGroup>
                 </h:panelGroup>
                 
@@ -28,6 +29,8 @@
                         <h:outputLabel for="password" value="Password" class="validate"/>
                         <h:inputSecret  id="password" value="#{personController.currentUser.password}"/>
                     </h:panelGroup>
+                    <h:messages style="color:red; text-align: center;" id="messages"/>
+
                 </h:panelGroup>
               
                 <!--<h:link class="waves-effect waves-light btn-small blue lighten-1"><i class="material-icons right">info</i>Cannot log in?</h:link>-->
@@ -38,10 +41,10 @@
                     </h:commandLink>
                 </h:panelGroup>
             </h:panelGroup>
+
             <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{personController.login()}">
                 <i class="material-icons right">chevron_right</i>Log in
             </h:commandLink>
-            <h:messages style="color:red" id="messages"/>
         </h:form>
     </h:body>
     

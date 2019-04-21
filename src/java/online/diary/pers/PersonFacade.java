@@ -5,16 +5,15 @@
  */
 package online.diary.pers;
 
-import java.util.ArrayList;
+
+import java.util.HashMap;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import online.diary.ents.Person;
 import java.util.List;
-import java.util.Objects;
-import online.diary.ents.Contact;
-
+import javax.faces.context.FacesContext;
 /**
  *
  * @author Konrad
@@ -34,69 +33,65 @@ public class PersonFacade extends AbstractFacade<Person> {
     }
     
     public List<Person> findPersonByUsernameAndPassword(String userName, String password) {
-        System.out.println(userName);
-        System.out.println(password);
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName = :userName AND p.password = :password", Person.class);
         query.setParameter("userName", userName);
         query.setParameter("password", password);
         return query.getResultList();
     }
     
-    public List<Person> getAllUsersWithoutLoggedUser(Person person) {
-        TypedQuery<Person> query;
+    public HashMap<String,Object> getAllUsersWithoutLoggedUser(Person person,int viewSize,int viewIndex) {
         
-        List<Person> toRemove = new ArrayList<>();
- 
-        query = em.createQuery("SELECT p FROM Person p LEFT JOIN p.contacts c WHERE p.userName != :userName", Person.class);
+        int paginationStart = (viewIndex * viewSize) - viewSize;
+        int paginationEnd = viewIndex * viewSize;
 
-        query.setParameter("userName", person.getUserName());
-    
+      
+        if (paginationStart < 0) {
+            paginationStart = 0;
+        }
+        
+        if (paginationEnd == 0) {
+            paginationEnd = viewSize;
+        }
+        
+        
+        
+        TypedQuery<Person> query;
+ 
+        query = em.createQuery("SELECT p FROM Person p WHERE p.id != :id", Person.class);
+
+        query.setParameter("id", person.getId());
+        
+        
         List<Person> results = query.getResultList();
         
-        List<Contact> contacts = getPersonContacts(person);
+        if (paginationEnd > results.size()) {
+            paginationEnd = results.size();
+        }
+        
+        int pages = results.size() / viewSize;
+        
+        int remainder = results.size() % viewSize;
+        
+        if (remainder > 0) {
+            pages++;
+        }
+       
+        HashMap<String, Object> returnMap = new HashMap<>();
 
+        returnMap.put("users", results.subList(paginationStart, paginationEnd));
+        returnMap.put("pages", pages);
         
-        results.forEach((r) -> {
-            contacts.forEach((c) -> {
-                if (Objects.equals(c.getContact().getId(), r.getId())) {
-                    toRemove.add(r);
-                }
-            });
-        }); 
         
-        results.removeAll(toRemove);
-        
-        System.out.println(results);
-
-        
-        return results;
+        return returnMap;
     }
     
-    public List<Person> searchForPerson(String search) {
-        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.firstName LIKE :search OR p.lastName LIKE :search OR p.emailAddress LIKE :search OR p.phoneNumber LIKE :search", Person.class);
-
-        query.setParameter("search", "%" + search + "%");
+    public List<Person> searchForPerson(String search, Person currentUser) {        
+        TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE (UPPER(p.firstName) LIKE :search OR UPPER(p.lastName) LIKE :search OR UPPER(p.emailAddress) LIKE :search OR UPPER(p.phoneNumber) LIKE :search) AND p.id != :myId", Person.class);
+        query.setParameter("search", "%" + search.toUpperCase() + "%");
+        query.setParameter("myId",currentUser.getId());
         return query.getResultList();
     }
-    
-    public List<Person> searchForContact(Person person, String search) {
-        TypedQuery<Person> query = em.createQuery("SELECT ref from Contact c JOIN c.contact ref WHERE c.person.id = :personId "
-                + "AND (ref.firstName LIKE :search OR ref.lastName LIKE :search OR ref.emailAddress LIKE :search OR ref.phoneNumber LIKE :search)", Person.class);
-        query.setParameter("search", "%" + search + "%");
-        query.setParameter("personId", person.getId());
-        return query.getResultList();
-    }
-    
-    public List<Contact> getPersonContacts(Person person) {
-        TypedQuery<Contact> query = em.createQuery("SELECT c FROM Contact c WHERE c.person.id = :personId", Contact.class);
-        query.setParameter("personId", person.getId());
-        List<Contact> results = query.getResultList();
-        return results;
-    }
-    
-    public Person reAttach(Person p) {
-        return this.edit(p);
-    }
+      
    
     
 }

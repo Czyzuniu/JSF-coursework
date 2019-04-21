@@ -37,9 +37,7 @@ public class Person implements Serializable {
     private String password;
     private String emailAddress;
     private String phoneNumber;
-    
-    @OneToMany(mappedBy = "contact", fetch=FetchType.EAGER)
-    private List<Contact>contacts;
+   
 
     @OneToOne
     private Address address;
@@ -66,17 +64,6 @@ public class Person implements Serializable {
         this.address = address;
     }
     
-    
-
-    public List<Contact> getContacts() {
-        return contacts;
-    }
-
-    public void setContacts(List<Contact> contacts) {
-        this.contacts = contacts;
-    }
-
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
