@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.ctrl;
+package konrad.online.diary.ctrl;
 
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
-import online.diary.classes.NavigationItem;
+import konrad.online.diary.classes.NavigationItem;
 
 /**
  *

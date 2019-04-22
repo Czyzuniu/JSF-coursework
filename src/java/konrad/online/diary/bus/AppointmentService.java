@@ -3,16 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.bus;
+package konrad.online.diary.bus;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import online.diary.ents.Appointment;
-import online.diary.ents.Person;
-import online.diary.pers.AppointmentFacade;
+import konrad.online.diary.ents.Appointment;
+import konrad.online.diary.ents.Person;
+import konrad.online.diary.pers.AppointmentFacade;
 
 /**
  *
@@ -35,6 +35,10 @@ public class AppointmentService {
     
     public List<Appointment> checkAvailability(Appointment appointment) {
         return appointmentFacade.checkAvailability(appointment);
+    }
+
+    public List<Appointment> findAppointment(String searchValue, Person currentUser) {
+       return appointmentFacade.findAppointment(searchValue, currentUser);
     }
     
     

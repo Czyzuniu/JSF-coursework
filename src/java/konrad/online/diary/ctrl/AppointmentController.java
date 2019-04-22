@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.ctrl;
+package konrad.online.diary.ctrl;
 
 import java.io.Serializable;
 import java.text.DateFormat;
@@ -21,10 +21,10 @@ import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
 import javax.faces.view.ViewScoped;
-import online.diary.bus.AppointmentService;
-import online.diary.bus.PersonService;
-import online.diary.ents.Appointment;
-import online.diary.ents.Person;
+import konrad.online.diary.bus.AppointmentService;
+import konrad.online.diary.bus.PersonService;
+import konrad.online.diary.ents.Appointment;
+import konrad.online.diary.ents.Person;
 
 /**
  *
@@ -133,11 +133,13 @@ public class AppointmentController implements Serializable {
     
     public String searchForAppointment(AjaxBehaviorEvent event) {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
+        
 
         if (!searchValue.isEmpty()) {
-            this.personController.getCurrentUser().getAppointments() = appointmentService.findAppointment(searchValue,this.getLoggedUser());
+            List<Appointment> s = appointmentService.findAppointment(searchValue,this.personController.getCurrentUser());
+            this.personController.getCurrentUser().setAppointments(s);
         } else {
-            contactList.clear();
+            this.personController.getCurrentUser().setAppointments(appointmentService.getAllAppointments(this.personController.getCurrentUser()));
         }
         return "";
     }

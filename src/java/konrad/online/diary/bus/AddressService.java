@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.bus;
+package konrad.online.diary.bus;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import online.diary.ents.Address;
-import online.diary.pers.AddressFacade;
+import konrad.online.diary.ents.Address;
+import konrad.online.diary.pers.AddressFacade;
 
 /**
  *

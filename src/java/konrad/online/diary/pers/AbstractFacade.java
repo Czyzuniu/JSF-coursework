@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.pers;
+package konrad.online.diary.pers;
 
 import java.util.List;
 import javax.persistence.EntityManager;

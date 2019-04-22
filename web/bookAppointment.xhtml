@@ -91,6 +91,8 @@
                         <h:panelGroup class="collection-item personRow">
                             <p>#{guest.firstName}</p>
                             <p>#{guest.lastName}</p>
+                            <p>#{guest.emailAddress}</p>
+                            <p>#{guest.phoneNumber}</p>
                             <i class="small material-icons" style="color:red; cursor: pointer">remove_circle
                                 <f:ajax listener="#{appointmentController.removeFromGuestList(guest)}" event='click' render=":bookAppointment:guestList" />
                             </i>

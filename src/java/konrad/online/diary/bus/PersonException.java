@@ -3,28 +3,28 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.bus;
+package konrad.online.diary.bus;
 
 /**
  *
  * @author Czyzuniu
  */
-public class AddressException extends Exception {
+public class PersonException extends Exception {
 
     /**
-     * Creates a new instance of <code>AddressException</code> without detail
+     * Creates a new instance of <code>PersonException</code> without detail
      * message.
      */
-    public AddressException() {
+    public PersonException() {
     }
 
     /**
-     * Constructs an instance of <code>AddressException</code> with the
-     * specified detail message.
+     * Constructs an instance of <code>PersonException</code> with the specified
+     * detail message.
      *
      * @param msg the detail message.
      */
-    public AddressException(String msg) {
+    public PersonException(String msg) {
         super(msg);
     }
 }

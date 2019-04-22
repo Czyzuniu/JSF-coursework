@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.pers;
+package konrad.online.diary.pers;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -12,8 +12,8 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import online.diary.ents.Appointment;
-import online.diary.ents.Person;
+import konrad.online.diary.ents.Appointment;
+import konrad.online.diary.ents.Person;
 
 /**
  *
@@ -57,4 +57,11 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         query.setParameter("personId", p.getId());
         return query.getResultList();
     }    
+
+    public List<Appointment> findAppointment(String searchValue, Person currentUser) {
+        TypedQuery<Appointment> query = em.createQuery("SELECT a from Appointment a LEFT JOIN a.guests g WHERE (a.owner.id = :personId OR g.id = :personId) AND a.description LIKE :searchValue", Appointment.class);
+        query.setParameter("personId", currentUser.getId());
+        query.setParameter("searchValue", "%" + searchValue.toUpperCase() + "%");
+        return query.getResultList();
+    }
 }

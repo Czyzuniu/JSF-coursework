@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.pers;
+package konrad.online.diary.pers;
 
 
 import java.util.HashMap;
@@ -11,7 +11,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import online.diary.ents.Person;
+import konrad.online.diary.ents.Person;
 import java.util.List;
 import javax.faces.context.FacesContext;
 /**

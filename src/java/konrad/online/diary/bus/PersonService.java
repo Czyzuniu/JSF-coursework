@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.bus;
+package konrad.online.diary.bus;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
@@ -13,8 +13,8 @@ import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import online.diary.pers.PersonFacade;
-import online.diary.ents.Person;
+import konrad.online.diary.pers.PersonFacade;
+import konrad.online.diary.ents.Person;
 /**
  *
  * @author Konrad

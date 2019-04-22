@@ -32,7 +32,13 @@
                         </h:panelGroup>
                     </ui:repeat>  
                 </h:panelGroup>
-                <ui:include src="pagination.xhtml"/>
+                <h:panelGroup layout="block" class="paginationContainer" rendered="#{!personController.allUsers.isEmpty()}">
+                    <ul class="pagination">
+                      <ui:repeat value="#{personController.pages}" var="page">
+                          <li class="#{personController.isPageActive(page) eq true ? 'active': ''}"><h:commandLink action="#{personController.changePage(page)}">#{page}</h:commandLink></li>
+                      </ui:repeat>
+                    </ul>
+                </h:panelGroup>
             </h:panelGroup>
             <!--<ui:include src="footer.xhtml"/>-->
         </h:form>
@@ -70,6 +76,18 @@
             justify-content: space-around;
             width: 100%;
             align-items: center;
+        }
+        
+        .paginationContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex: 1;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
         }
         
     </style>

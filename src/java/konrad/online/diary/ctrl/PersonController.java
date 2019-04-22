@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package online.diary.ctrl;
+package konrad.online.diary.ctrl;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,15 +20,16 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import online.diary.ents.Person;
+import konrad.online.diary.ents.Person;
 import javax.inject.Named;
-import online.diary.bus.AddressException;
-import online.diary.bus.PersonException;
-import online.diary.bus.PersonService;
-import online.diary.bus.AddressService;
-import online.diary.bus.AppointmentService;
-import online.diary.ents.Address;
-import online.diary.ents.Appointment;
+import konrad.online.diary.bus.AddressException;
+import konrad.online.diary.bus.PersonException;
+import konrad.online.diary.bus.PersonService;
+import konrad.online.diary.bus.AddressService;
+import konrad.online.diary.bus.AppointmentService;
+import konrad.online.diary.classes.Pagination;
+import konrad.online.diary.ents.Address;
+import konrad.online.diary.ents.Appointment;
 /**
  *
  * @author Konrad
@@ -44,8 +45,7 @@ public class PersonController {
     private List<Person> allUsers = new ArrayList();
     private ArrayList<Integer>pages = new ArrayList();
     private ArrayList<Locale>countries = new ArrayList();
-    private final int viewSize = 3;
-    private int viewIndex = 1;
+    Pagination pagination = new Pagination();
 
     
     @EJB
@@ -56,8 +56,6 @@ public class PersonController {
     
     @EJB
     private AppointmentService appointmentService;
-    @ManagedProperty("#{paginationController}")
-    private PaginationController paginationController;
 
     
     /**
@@ -77,19 +75,10 @@ public class PersonController {
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
-    
 
-    public PaginationController getPaginationController() {
-        return paginationController;
-    }
-
-    public void setPaginationController(PaginationController paginationController) {
-        this.paginationController = paginationController;
-    }
-  
     
     public boolean isPageActive(int page) {
-        return page == viewIndex;
+        return page == pagination.getViewIndex();
     }
 
     public ArrayList<Integer> getPages() {
@@ -194,7 +183,7 @@ public class PersonController {
     public String searchForPerson(AjaxBehaviorEvent event) throws PersonException {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
         if (searchValue.equals("")) {
-            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,viewSize,viewIndex);
+            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,pagination.getViewSize(),pagination.getViewIndex());
             allUsers = (List<Person>) results.get("users");
         } else {
             allUsers = personService.searchForPerson(searchValue,currentUser);   
@@ -256,14 +245,14 @@ public class PersonController {
     }
     
     public void changePage(int page) throws PersonException {
-        viewIndex = page;
-        HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser, viewSize,viewIndex);
+        pagination.setViewIndex(page);
+        HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser, pagination.getViewSize(),pagination.getViewIndex());
         allUsers = (List<Person>) results.get("users");
     }
     
     public void onPageLoad() {
         try {
-            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,viewSize, viewIndex);
+            HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,pagination.getViewSize(), pagination.getViewIndex());
             allUsers = (List<Person>) results.get("users");
             ArrayList<Integer> pageCount = new ArrayList<>();
             
@@ -273,8 +262,7 @@ public class PersonController {
           
             this.setPages(pageCount);
             
-            
-            System.out.println(pageCount);
+           
             currentUser.setAppointments(appointmentService.getAllAppointments(currentUser));
         } catch (PersonException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);

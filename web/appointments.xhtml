@@ -18,8 +18,8 @@
                 <h:panelGroup layout="block" class="input-field">
                     <i class="material-icons prefix">search</i>
                     <h:outputLabel for="search" value="Search appointments" class="active"/>
-                    <h:inputText  id="search" class="active" >
-                        <f:ajax listener="#{appointmentController.searchAppointment}" event='keyup' render="@all" />
+                    <h:inputText  id="search" class="active" onkeyup="javascript:configureContent();" >
+                        <f:ajax listener="#{appointmentController.searchForAppointment}" event='keyup' render="appointmentsForm:appointList" />
                     </h:inputText>
                 </h:panelGroup>
                 <h:panelGroup rendered="#{personController.currentUser.appointments.isEmpty()}">
@@ -87,6 +87,18 @@
             align-items: center;
         }
         
+         .paginationContainer {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            flex: 1;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+        }
+        
         .guestContainer {
             margin-top: 50px !important;
         }
@@ -152,8 +164,15 @@
     
     <script>
         window.addEventListener('DOMContentLoaded', function() {
-           let elems = document.querySelectorAll('.collapsible');
-           let instances = M.Collapsible.init(elems, {});
+               configureContent();
          });
+ 
+        function configureContent() {
+            setTimeout(() => {
+                let elems = document.querySelectorAll('.collapsible');
+                let instances = M.Collapsible.init(elems, {});  
+            }, 500)
+        }
     </script>
+  
 </html>
