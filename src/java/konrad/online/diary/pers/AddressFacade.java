@@ -20,11 +20,18 @@ public class AddressFacade extends AbstractFacade<Address> {
     @PersistenceContext(unitName = "OnlineDiaryProjectPU")
     private EntityManager em;
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
+    /**
+     *
+     */
     public AddressFacade() {
         super(Address.class);
     }

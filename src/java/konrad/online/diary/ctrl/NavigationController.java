@@ -21,6 +21,9 @@ public class NavigationController {
     private String currentView = "home";
     private List<NavigationItem> navigationItems;
 
+    /**
+     * Constructor for navigation controller
+     */
     public NavigationController() {
         navigationItems = new ArrayList<>();
         navigationItems.add(new NavigationItem("Home", "home"));
@@ -29,24 +32,43 @@ public class NavigationController {
         navigationItems.add(new NavigationItem("My Profile", "profile"));
     }
 
+    /**
+     * returns a list of navigationsItems
+     * @return navigationItems
+     */
     public List<NavigationItem> getNavigationItems() {
         return navigationItems;
     }
 
+    /**
+     * sets navigationItems
+     * @param navigationItems
+     */
     public void setNavigationItems(List<NavigationItem> navigationItems) {
         this.navigationItems = navigationItems;
     }
-    
-    
 
+    /**
+     * returns the value of currentView
+     * @return currentView
+     */
     public String getCurrentView() {
         return currentView;
     }
 
+    /**
+     * sets the value of currentView
+     * @param currentView
+     */
     public void setCurrentView(String currentView) {
         this.currentView = currentView;
     }
     
+    /**
+     * navigates to the passed page with redirect
+     * @param page
+     * @return page
+     */
     public String navigate(String page) {
         setCurrentView(page);
         return page + "?faces-redirect=true";

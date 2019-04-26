@@ -14,29 +14,52 @@ public class Pagination {
     private int viewSize;
     private int viewIndex;
     
+    /** 
+     * Creates a new instance of Pagination
+     * @param viewSize
+     * @param viewIndex
+     */
     public Pagination(int viewSize, int viewIndex) {
         this.viewSize = viewSize;
         this.viewIndex = viewIndex;
     }
     
+    /**
+     * Creates a new instance of Pagination
+     */
     public Pagination() {
-        this.viewSize = 3;
+        this.viewSize = 5;
         this.viewIndex = 1;
-    }
-    
+    }       
 
+    /**
+     * returns the view size
+     * @return viewSize
+     */
     public int getViewSize() {
         return viewSize;
     }
 
+    /**
+     * sets view size
+     * @param viewSize
+     */
     public void setViewSize(int viewSize) {
         this.viewSize = viewSize;
     }
 
+    /**
+     * returns the view index
+     * @return viewIndex
+     */
     public int getViewIndex() {
         return viewIndex;
     }
 
+    /** 
+     * sets the view index
+     * @param viewIndex
+     */
     public void setViewIndex(int viewIndex) {
         this.viewIndex = viewIndex;
     }

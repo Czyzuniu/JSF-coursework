@@ -20,7 +20,6 @@ import javax.inject.Named;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
-import javax.faces.view.ViewScoped;
 import konrad.online.diary.bus.AppointmentService;
 import konrad.online.diary.bus.PersonService;
 import konrad.online.diary.ents.Appointment;
@@ -35,13 +34,14 @@ import konrad.online.diary.ents.Person;
 @ManagedBean
 public class AppointmentController implements Serializable {
 
-    private List<Person> contactList = new ArrayList<>();
+    private List<Person> guestList = new ArrayList<>();
     private Appointment appointment;
     private String appointmentDate = "";
     private boolean ownerAttending = true;
     
     @ManagedProperty(value="#{personController}")
     private PersonController personController;
+
 
     
     @EJB
@@ -50,87 +50,162 @@ public class AppointmentController implements Serializable {
     @EJB
     private AppointmentService appointmentService;
     
+    /**
+     * Constructor of AppointmentController
+     * creates a new appointment at start
+     */
     public AppointmentController() {
        appointment = new Appointment();
     }
-
-    public boolean isOwnerAttending() {
-        return ownerAttending;
-    }
-
-    public PersonController getPersonController() {
-        return personController;
-    }
-
-    public void setPersonController(PersonController personController) {
-        this.personController = personController;
-    }
     
-
-    public void setOwnerAttending(boolean ownerAttending) {
-        this.ownerAttending = ownerAttending;
-    }
     
-
-    public String getAppointmentDate() {
-        return appointmentDate;
-    }
-
-    public void setAppointmentDate(String appointmentDate) {
-        this.appointmentDate = appointmentDate;
-    }
-
-    public AppointmentService getAppointmentService() {
-        return appointmentService;
-    }
-
-    public void setAppointmentService(AppointmentService appointmentService) {
-        this.appointmentService = appointmentService;
-    }
-   
-    
-    public Appointment getAppointment() {
-        return appointment;
-    }
-   
-
+    /**
+     * Sets the appointment
+     * @param appointment
+     */
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
     }
 
+    /**
+     * get the personController
+     * @return personController
+     */
+    public PersonController getPersonController() {
+        return personController;
+    }
+
+    /**
+     * set the personController
+     * @param personController
+     */
+    public void setPersonController(PersonController personController) {
+        this.personController = personController;
+    }
+
+    /**
+     * get the list of all
+     * @return
+     */
+    public List<Person> getContactList() {
+        return guestList;
+    }
+
+    /**
+     * set the contactList for this appointment
+     * @param contactList
+     */
+    public void setContactList(List<Person> contactList) {
+        this.guestList = contactList;
+    }
+
+    /**
+     * get the appointmentDate for the appointment
+     * @return appointmentDate
+     */
+    public String getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    /**
+     * set the appointmentDate
+     * @param appointmentDate
+     */
+    public void setAppointmentDate(String appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    /**
+     * get the value of ownerAttending
+     * @return ownerAttending
+     */
+    public boolean isOwnerAttending() {
+        return ownerAttending;
+    }
+
+    /**
+     * set the value of ownerAttending
+     * @param ownerAttending
+     */
+    public void setOwnerAttending(boolean ownerAttending) {
+        this.ownerAttending = ownerAttending;
+    }
+
+    /**
+     * get the person service
+     * @return personService
+     */
     public PersonService getPersonService() {
         return personService;
     }
 
+    /**
+     * set the person service
+     * @param personService
+     */
     public void setPersonService(PersonService personService) {
         this.personService = personService;
     }
 
-    
-    public List<Person> getContactList() {
-        return contactList;
+    /**
+     * get the appointment service
+     * @return appointmentService
+     */
+    public AppointmentService getAppointmentService() {
+        return appointmentService;
     }
 
-    public void setContactList(List<Person> contactList) {
-        this.contactList = contactList;
+    /**
+     * set appointment service
+     * @param appointmentService
+     */
+    public void setAppointmentService(AppointmentService appointmentService) {
+        this.appointmentService = appointmentService;
     }
     
+
+    
+    /**
+     * returns the appointment
+     * @return appointment
+     */
+    public Appointment getAppointment() {
+        return appointment;
+    }
+   
+    
+    /**
+     * returns the current logged user from the session map
+     * @return Person
+     */
     public Person getLoggedUser() {
         FacesContext context = FacesContext.getCurrentInstance();
         return (Person) context.getExternalContext().getSessionMap().get("loggedUser");
     }
     
+    /**
+     * used to perform a search to add a guest to the appointment
+     * returns the same view
+     * @param event
+     * @return 
+     */
     public String searchForGuest(AjaxBehaviorEvent event) {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
 
         if (!searchValue.isEmpty()) {
-            contactList = personService.searchForPerson(searchValue,this.getLoggedUser());
+            guestList = personService.searchForPerson(searchValue,this.getLoggedUser());
         } else {
-            contactList.clear();
+            guestList.clear();
         }
         return "";
     }
     
+    /**
+     * used to perform a search of the appointment by its description
+     * returns the same view
+     * @param event
+     * @return ""
+     */
     public String searchForAppointment(AjaxBehaviorEvent event) {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
         
@@ -144,6 +219,12 @@ public class AppointmentController implements Serializable {
         return "";
     }
     
+    /**
+     * Creates an appointment a new appointment
+     * returns the user to appointments screen
+     * @return "appointments"
+     * @throws ParseException
+     */
     public String createAppointment() throws ParseException {
         appointment.setOwner(getLoggedUser());
         
@@ -183,14 +264,24 @@ public class AppointmentController implements Serializable {
         
     }
 
+    /**
+     * adds the person to the guest list of the appointment
+     * @param p
+     * @return ""
+     */
     public String addToGuestList(Person p) {
        if (this.appointment.getGuests().indexOf(p) == -1) {
            this.appointment.getGuests().add(p);
-           this.contactList.remove(p);
+           this.guestList.remove(p);
        }
        return "";
     }
     
+    /**
+     * remove the person from the guest list
+     * @param p
+     * @return ""
+     */
     public String removeFromGuestList(Person p) {
        if (this.appointment.getGuests().indexOf(p) != -1) {
            this.appointment.getGuests().remove(p);

@@ -32,52 +32,98 @@ public class Address implements Serializable {
     @OneToOne(mappedBy = "address", cascade = CascadeType.PERSIST)
     private Person person;
 
+    /**
+     * get the value of country
+     * @return country
+     */
     public String getCountry() {
         return country;
     }
 
+    /**
+     *  get the person at the address
+     * @return person
+     */
     public Person getPerson() {
         return person;
     }
 
+    /**
+     *  set the person to the address
+     * @param person
+     */
     public void setResident(Person person) {
         this.person = person;
     }
 
+    /**
+     * set the country
+     * @param country
+     */
     public void setCountry(String country) {
         this.country = country;
     }
 
+    /**
+     * get the city
+     * @return city
+     */
     public String getCity() {
         return city;
     }
 
+    /**
+     * set the city
+     * @param city
+     */
     public void setCity(String city) {
         this.city = city;
     }
 
+    /**
+     * get postal address
+     * @return postalAddress
+     */
     public String getPostalAddress() {
         return postalAddress;
     }
 
+    /**
+     * set postal address
+     * @param postalAddress
+     */
     public void setPostalAddress(String postalAddress) {
         this.postalAddress = postalAddress;
     }
 
+    /**
+     *  get the street
+     * @return street
+     */
     public String getStreet() {
         return street;
     }
 
+    /**
+     * set the street
+     * @param street
+     */
     public void setStreet(String street) {
         this.street = street;
     }
     
-    
-
+    /**
+     * get the id of the record
+     * @return
+     */
     public Long getId() {
         return id;
     }
 
+    /**
+     * set the id of the record
+     * @param id
+     */
     public void setId(Long id) {
         this.id = id;
     }

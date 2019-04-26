@@ -6,7 +6,6 @@
 package konrad.online.diary.ctrl;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -15,7 +14,6 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
@@ -60,6 +58,7 @@ public class PersonController {
     
     /**
      * Creates a new instance of PersonController
+     * loads the countries from Locales
      */
     public PersonController() {
          for (String countryCode:Locale.getISOCountries()) {
@@ -68,79 +67,148 @@ public class PersonController {
          }
     }
     
+    /**
+     * gets the appointment service
+     * @return
+     */
     public AppointmentService getAppointmentService() {
         return appointmentService;
     }
 
+    /**
+     *
+     * @param appointmentService
+     */
     public void setAppointmentService(AppointmentService appointmentService) {
         this.appointmentService = appointmentService;
     }
 
-    
+    /**
+     * returns true if the current page equals the current pagination page
+     * @param page
+     * @return boolean
+     */
     public boolean isPageActive(int page) {
         return page == pagination.getViewIndex();
     }
 
+    /**
+     * returns a list of pages for pagination
+     * @return pages
+     */
     public ArrayList<Integer> getPages() {
         return pages;
     }
 
+    /**
+     * sets the list of pages
+     * @param pages
+     */
     public void setPages(ArrayList<Integer> pages) {
-        System.out.println(pages);
         this.pages = pages;
     }
 
-
+    /**
+     * gets the value of repeatPassword
+     * @return repeatPassword
+     */
     public String getRepeatPassword() {
         return repeatPassword;
     }
 
+    /**
+     * gets the value of Address
+     * @return address
+     */
     public Address getAddress() {
         return address;
     }
 
+    /**
+     * sets the value of Address
+     * @param address
+     */
     public void setAddress(Address address) {
         this.address = address;
     }
     
-
+    /**
+     * sets the value of repeat password
+     * @param repeatPassword
+     */
     public void setRepeatPassword(String repeatPassword) {
         this.repeatPassword = repeatPassword;
     }
 
+    /**
+     * returns the value of newUser
+     * @return newUser
+     */
     public Person getNewUser() {
         return newUser;
     }
 
+    /**
+     * sets the new user
+     * @param newUser
+     */
     public void setNewUser(Person newUser) {
         this.newUser = newUser;
     }
 
+    /**
+     * returns th current logged in user
+     * @return currentUser
+     */
     public Person getCurrentUser() {
 //        currentUser = personService.reattachPerson(currentUser);
         return currentUser;
     }
 
+    /**
+     * sets the current user
+     * @param currentUser
+     */
     public void setCurrentUser(Person currentUser) {
         this.currentUser = currentUser;
     }
    
+    /**
+     * returns a list of allUsers
+     * @return allUsers
+     */
     public List<Person> getAllUsers() {
         return allUsers;
     }
 
+    /**
+     * sets a list of allUsers
+     * @param allUsers
+     */
     public void setAllUsers(ArrayList<Person> allUsers) {
         this.allUsers = allUsers;
     }
 
+    /**
+     * gets the AddressService
+     * @return addressService
+     */
     public AddressService getAddressService() {
         return addressService;
     }
 
+    /**
+     * sets the AddressService
+     * @param addressService
+     */
     public void setAddressService(AddressService addressService) {
         this.addressService = addressService;
     }
     
+    /**
+     * registers a new user 
+     * @return login view
+     */
     public String registerUser() {
         
         if (!newUser.getPassword().equals(this.repeatPassword)) {
@@ -170,16 +238,24 @@ public class PersonController {
     }
           
     
-    public boolean isGB() {
-        return address.getCountry().equals("GB");
-    }
-    
+    /**
+     * navigates to register page 
+     * sets the newUser to new Person
+     * sets the address to new Address
+     * @return
+     */
     public String goToRegister() {    
         newUser = new Person();
         address = new Address();
         return "/register.xhtml?faces-redirect=true";
     }
     
+    /**
+     * searches for person in the database
+     * @param event
+     * @return ""
+     * @throws PersonException
+     */
     public String searchForPerson(AjaxBehaviorEvent event) throws PersonException {
         String searchValue = (String) ((UIOutput) event.getSource()).getValue();
         if (searchValue.equals("")) {
@@ -191,21 +267,35 @@ public class PersonController {
         return "";
     }
    
-
+    /**
+     * returns a list of Locales
+     * @return countries
+     */
     public ArrayList<Locale> getCountries() {
         return countries;
     }
 
+    /**
+     * sets the list of locales
+     * @param countries
+     */
     public void setCountries(ArrayList<Locale> countries) {
         this.countries = countries;
     }
     
-    
+    /**
+     * returns the list of guests for specified appointments
+     * @param appointment
+     * @return List
+     */
     public List<Person> getGuestForAppointment(Appointment appointment) {
         return appointment.getGuests();
     }
     
-    
+    /**
+     * logins to the system
+     * @return "home" view
+     */
     public String login() {
         boolean isAuthenticated = false;
         
@@ -231,25 +321,40 @@ public class PersonController {
         return responseView;
     }
     
-    
+    /**
+     * logs out of the system
+     * @return "login" view
+     */
     public String signOut() {
         currentUser = new Person();
         FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
         return "/login.xhtml?faces-redirect=true";
     }
     
+    /**
+     * edits the current user
+     * @return "home"
+     */
     public String editUser() {
         personService.updateUser(currentUser);
         addressService.updateAddress(currentUser.getAddress());
         return "/home.xhtml?faces-redirect=true";
     }
     
+    /**
+     * changes the page on the pagination
+     * @param page
+     * @throws PersonException
+     */
     public void changePage(int page) throws PersonException {
         pagination.setViewIndex(page);
         HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser, pagination.getViewSize(),pagination.getViewIndex());
         allUsers = (List<Person>) results.get("users");
     }
     
+    /**
+     * sets up pagination and appointments on page load
+     */
     public void onPageLoad() {
         try {
             HashMap<String,Object> results = personService.getAllUsersWithoutLoggedUser(currentUser,pagination.getViewSize(), pagination.getViewIndex());

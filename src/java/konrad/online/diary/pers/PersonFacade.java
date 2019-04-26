@@ -13,7 +13,6 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import konrad.online.diary.ents.Person;
 import java.util.List;
-import javax.faces.context.FacesContext;
 /**
  *
  * @author Konrad
@@ -23,15 +22,28 @@ public class PersonFacade extends AbstractFacade<Person> {
     @PersistenceContext(unitName = "OnlineDiaryProjectPU")
     private EntityManager em;
 
+    /**
+     *
+     * @return
+     */
     @Override
     protected EntityManager getEntityManager() {
         return em;
     }
 
+    /**
+     *
+     */
     public PersonFacade() {
         super(Person.class);
     }
     
+    /**
+     *
+     * @param userName
+     * @param password
+     * @return
+     */
     public List<Person> findPersonByUsernameAndPassword(String userName, String password) {
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE p.userName = :userName AND p.password = :password", Person.class);
         query.setParameter("userName", userName);
@@ -39,6 +51,13 @@ public class PersonFacade extends AbstractFacade<Person> {
         return query.getResultList();
     }
     
+    /**
+     * returns a list of Person
+     * @param person
+     * @param viewSize
+     * @param viewIndex
+     * @return
+     */
     public HashMap<String,Object> getAllUsersWithoutLoggedUser(Person person,int viewSize,int viewIndex) {
         
         int paginationStart = (viewIndex * viewSize) - viewSize;
@@ -85,6 +104,12 @@ public class PersonFacade extends AbstractFacade<Person> {
         return returnMap;
     }
     
+    /**
+     * queries the database for a person with the search value
+     * @param search
+     * @param currentUser
+     * @return
+     */
     public List<Person> searchForPerson(String search, Person currentUser) {        
         TypedQuery<Person> query = em.createQuery("SELECT p FROM Person p WHERE (UPPER(p.firstName) LIKE :search OR UPPER(p.lastName) LIKE :search OR UPPER(p.emailAddress) LIKE :search OR UPPER(p.phoneNumber) LIKE :search) AND p.id != :myId", Person.class);
         query.setParameter("search", "%" + search.toUpperCase() + "%");

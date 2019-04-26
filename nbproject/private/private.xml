@@ -3,24 +3,26 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ctrl/PersonController.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/bus/AddressService.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/register.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/PersonFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/bus/PersonService.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/classes/Pagination.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/ents/Address.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/login.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/PersonService.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/AddressService.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/ctrl/PersonController.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/pers/PersonFacade.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/navbar.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/pers/AppointmentFacade.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ctrl/AppointmentController.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/start.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/ctrl/AppointmentController.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/bookAppointment.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Person.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Appointment.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/pers/AppointmentFacade.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/WEB-INF/web.xml</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/home.xhtml</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/bus/AppointmentService.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/appointments.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/classes/Pagination.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/ctrl/SetupController.java</file>
             <file>file:/Users/Czyzuniu/Projects/JSF-coursework/web/profile.xhtml</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/ents/Address.java</file>
-            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/online/diary/bus/AppointmentService.java</file>
+            <file>file:/Users/Czyzuniu/Projects/JSF-coursework/src/java/konrad/online/diary/ents/Person.java</file>
         </group>
     </open-files>
 </project-private>
