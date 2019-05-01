@@ -10,12 +10,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.inject.Named;
 import javax.faces.component.UIOutput;
 import javax.faces.context.FacesContext;
@@ -30,7 +31,7 @@ import konrad.online.diary.ents.Person;
  * @author Czyzuniu
  */
 @Named(value = "appointmentController")
-@SessionScoped
+@ViewScoped
 @ManagedBean
 public class AppointmentController implements Serializable {
 
@@ -38,6 +39,7 @@ public class AppointmentController implements Serializable {
     private Appointment appointment;
     private String appointmentDate = "";
     private boolean ownerAttending = true;
+    private boolean filteredByDate = false;
     
     @ManagedProperty(value="#{personController}")
     private PersonController personController;
@@ -59,6 +61,7 @@ public class AppointmentController implements Serializable {
     }
     
     
+    
     /**
      * Sets the appointment
      * @param appointment
@@ -66,6 +69,24 @@ public class AppointmentController implements Serializable {
     public void setAppointment(Appointment appointment) {
         this.appointment = appointment;
     }
+
+    /**
+     * returns the value of isFilteredByDate
+     * @return filteredByDate
+     */
+    public boolean isFilteredByDate() {
+        return filteredByDate;
+    }
+
+    /**
+     * set the value of filtered to true by the given parameter
+     * @param filteredByDate
+     */
+    public void setFilteredByDate(boolean filteredByDate) {
+        this.filteredByDate = filteredByDate;
+    }
+    
+    
 
     /**
      * get the personController
@@ -84,7 +105,7 @@ public class AppointmentController implements Serializable {
     }
 
     /**
-     * get the list of all
+     * get the list of all guests
      * @return
      */
     public List<Person> getContactList() {
@@ -260,7 +281,9 @@ public class AppointmentController implements Serializable {
         }
                
         
-        return "appointments";
+        appointment = new Appointment();
+        
+        return "appointments?faces-redirect=true";
         
     }
 
@@ -289,5 +312,48 @@ public class AppointmentController implements Serializable {
        return "";
     }
     
+    /**
+     *
+     * @return
+     * @throws ParseException
+     */
+    public String searchByDate() throws ParseException {
+
+        DateFormat finalFormat = new SimpleDateFormat("dd-MM-yyyy hh:mm"); 
+        Date start = finalFormat.parse(this.appointmentDate + " " + "00:00");
+        Date end = finalFormat.parse(this.appointmentDate + " " + "23:59");
+  
+        if (!this.appointmentDate.isEmpty()) {
+            List<Appointment> appointments = appointmentService.findAppointmentByDate(start, end,this.personController.getCurrentUser());
+            this.personController.getCurrentUser().setAppointments(appointments);
+        } else {
+           showAllAppointments();
+        }
+        
+        this.setFilteredByDate(true);
+        
+        return "";
+    }
+    
+    /**
+     * Method to query the database for all appointments for the current user
+     * the returned appointments are set to the currentUser's appointment list
+     */
+    public void showAllAppointments() {
+         this.personController.getCurrentUser().setAppointments(appointmentService.getAllAppointments(this.personController.getCurrentUser()));
+         this.setFilteredByDate(false);
+    }
+    
+    /**
+     * Calls the appointmentService to remove the appointment from the database
+     * @param a
+     * @return
+     */
+    public String cancelAppointment(Appointment a) {
+        appointmentService.cancelAppointment(a);
+        showAllAppointments();
+        
+        return "appointments";
+    }
     
 }

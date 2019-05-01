@@ -3,6 +3,18 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
      
+        
+    <h:head>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+        <script
+                src="http://code.jquery.com/jquery-3.3.1.min.js"
+                integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+                crossorigin="anonymous">
+        </script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/snackbarjs/1.1.0/snackbar.min.js" />
+    </h:head>
     
     <h:body>
         <h:form id="registerForm">
@@ -26,7 +38,6 @@
                         <h:inputSecret  id="password" value="#{personController.newUser.password}" required="true" requiredMessage="This field cannot be empty">
                         </h:inputSecret>
                         <h:message for = "password" style = "color:red" />
-                        <h:message for = "passwords" style = "color:red" />
                     </h:panelGroup>
                     <h:panelGroup layout="block"  class="input-field inlineInput">
                         <h:outputLabel for="re-password" value="Repeat Password *" class="validate"/>
@@ -34,7 +45,6 @@
 
                         </h:inputSecret>
                         <h:message for = "re-password" style = "color:red" />
-                        <h:message for = "passwords" style = "color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup layout="block" class="row inputContainer">
@@ -82,14 +92,17 @@
                         <h:outputLabel for="postal" value="Postal / Zip code" class="validate" />
                         <h:inputText  id="postal" value="#{personController.address.postalAddress}">
                         </h:inputText>
-                    <h:message for="postalAddressException" style="color:red" />
+                    <h:message for="postal" style="color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
-                        <h:outputLabel for="email" value="Phone number" class="validate"/>
-                        <h:inputText  id="phone" value="#{personController.newUser.phoneNumber}"/>
+                        <h:outputLabel for="phone" value="Phone number" class="validate"/>
+                        <h:inputText  id="phone" value="#{personController.newUser.phoneNumber}" validatorMessage="The phone number is invalid">
+                            <f:validateRegex pattern="^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$" />
+                        </h:inputText>
+                        <h:message for="phone" style="color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 

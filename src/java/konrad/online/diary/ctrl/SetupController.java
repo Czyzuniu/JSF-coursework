@@ -84,7 +84,7 @@ public class SetupController {
                 person.setLastName("TestUser");
                 person.setPassword("TestUser");
                 person.setUserName("TestUser");
-                person.setEmailAddress("TestUser@email.com");
+                person.setEmailAddress("TestUser150@gmail.com");
                 person.setPhoneNumber("0754867312");
 
                 Address address = new Address();

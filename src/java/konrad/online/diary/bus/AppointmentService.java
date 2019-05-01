@@ -5,6 +5,7 @@
  */
 package konrad.online.diary.bus;
 
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -58,6 +59,25 @@ public class AppointmentService {
      */
     public List<Appointment> findAppointment(String searchValue, Person currentUser) {
        return appointmentFacade.findAppointment(searchValue, currentUser);
+    }
+    
+    /**
+     * calls the facade to remove the appointment from database
+     * @param a
+     */
+    public void cancelAppointment(Appointment a) {
+        appointmentFacade.remove(a);
+    }
+
+    /**
+     * finds the appointment on the given date
+     * @param start
+     * @param end
+     * @param currentUser
+     * @return 
+     */
+    public List<Appointment> findAppointmentByDate(Date start, Date end, Person currentUser) {
+        return appointmentFacade.findAppointmentByDate(start,end, currentUser);
     }
     
     

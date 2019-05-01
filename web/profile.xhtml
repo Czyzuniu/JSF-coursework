@@ -62,21 +62,24 @@
                         <h:outputLabel for="postal" value="Postal / Zip code" class="validate" />
                         <h:inputText  id="postal" value="#{personController.currentUser.address.postalAddress}">
                         </h:inputText>
-                    <h:message for="postalAddressException" style="color:red" />
+                    <h:message for="postalAddress" style="color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
-                        <h:outputLabel for="email" value="Phone number" class="validate"/>
-                        <h:inputText  id="phone" value="#{personController.currentUser.phoneNumber}"/>
+                        <h:outputLabel for="phone" value="Phone number" class="validate"/>
+                        <h:inputText  id="phone" value="#{personController.newUser.phoneNumber}" validatorMessage="The phone number is invalid">
+                            <f:validateRegex pattern="^(((\+44\s?\d{4}|\(?0\d{4}\)?)\s?\d{3}\s?\d{3})|((\+44\s?\d{3}|\(?0\d{3}\)?)\s?\d{3}\s?\d{4})|((\+44\s?\d{2}|\(?0\d{2}\)?)\s?\d{4}\s?\d{4}))(\s?\#(\d{4}|\d{3}))?$" />
+                        </h:inputText>
+                        <h:message for="phone" style="color:red" />
                     </h:panelGroup>
                 </h:panelGroup>
                 
                 <h:panelGroup layout="block" class="row inputContainer">
                     <h:panelGroup layout="block" class="input-field">
                         <h:outputLabel for="email" value="Email address *" class="validate" />
-                        <h:inputText  id="email" value="#{personController.currentUser.emailAddress}"  required="true" requiredMessage="This field cannot be empty" validatorMessage="The email is not valid">
+                        <h:inputText  id="email" value="#{personController.currentUser.emailAddress}"  required="true" requiredMessage="This field cannot be empty" validatorMessage="The email is not valid format">
                              <f:validateRegex pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"/>
                         </h:inputText>
                         <h:message for = "email" style = "color:red" />

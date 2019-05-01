@@ -9,17 +9,24 @@
         <ui:include src="navbar.xhtml"/>
         <h:form id="appointmentsForm">
             <h:panelGroup layout="block" class="main">
-                <h:panelGroup layout="block" class="input-field">
+                <h:panelGroup rendered="#{not personController.currentUser.appointments.isEmpty()}" layout="block" class="input-field">
                     <i class="material-icons prefix">search</i>
                     <h:outputLabel for="search" value="Search appointments" class="active"/>
                     <h:inputText  id="search" class="active" onkeyup="javascript:configureContent();" >
                         <f:ajax listener="#{appointmentController.searchForAppointment}" event='keyup' render="appointmentsForm:appointList" />
                     </h:inputText>
                 </h:panelGroup>
+                    <!-- Modal Trigger -->
+                    <h:panelGroup layout="block" rendered="#{not personController.currentUser.appointments.isEmpty()}">
+                        <a  style="margin:5px;" class="waves-effect waves-light btn modal-trigger" href="#modal1">Search by date</a>
+                    </h:panelGroup>
+                    <h:commandLink class="waves-effect waves-light btn" style="margin:5px;" action="#{appointmentController.showAllAppointments()}" rendered="#{appointmentController.filteredByDate}">
+                        Show all appointments again
+                    </h:commandLink>
                 <h:panelGroup rendered="#{personController.currentUser.appointments.isEmpty()}">
                     <h5 style="text-align: center;"  >You do not have any appointments</h5>
                 </h:panelGroup>
-                <h:panelGroup layout="block" class="collection collapsible" id="appointList" rendered="#{not personController.currentUser.appointments.isEmpty()}">
+                     <h:panelGroup layout="block" class="collection collapsible" style="margin-top:20px;" id="appointList" rendered="#{not personController.currentUser.appointments.isEmpty()}">
                     <ui:repeat value="#{personController.currentUser.appointments}" var="appointment">
                         <li class="collection-item inherit">
                             <h:panelGroup  layout="block" class="collapsible-header">
@@ -49,25 +56,51 @@
                                         </h:outputText>
                                     </h:panelGroup>
                                 </h:panelGroup>
-                            <h:panelGroup layout="block" class="collection guestContainer" id="guestList">
-                                <h5 style="text-align:center;">Appointment guests</h5>
-                                <ui:repeat value="#{appointment.guests}" var="guest">
-                                    <h:panelGroup class="collection-item personRow">
-                                        <p>#{guest.firstName}</p>
-                                        <p>#{guest.lastName}</p>
-                                        <p>#{guest.emailAddress}</p>
-                                        <p>#{guest.phoneNumber}</p>
-                                        <h:panelGroup layout="block" rendered="#{guest.id == personController.currentUser.id}">
-                                            <i class="small material-icons">person</i>
+                                <h:panelGroup layout="block" class="collection guestContainer" id="guestList">
+                                    <h5 style="text-align:center;">Appointment guests</h5>
+                                    <ui:repeat value="#{appointment.guests}" var="guest">
+                                        <h:panelGroup class="collection-item personRow">
+                                            <p>#{guest.firstName}</p>
+                                            <p>#{guest.lastName}</p>
+                                            <p>#{guest.emailAddress}</p>
+                                            <p>#{guest.phoneNumber}</p>
+                                            <h:panelGroup layout="block" rendered="#{guest.id == personController.currentUser.id}">
+                                                <i class="small material-icons">person</i>
+                                            </h:panelGroup>
                                         </h:panelGroup>
-                                    </h:panelGroup>
-                                </ui:repeat>  
-                            </h:panelGroup>
+                                    </ui:repeat>  
+                                </h:panelGroup>
+                                <h:panelGroup layout="block" style="display: flex;justify-content: center;margin-top: 25px;">
+                                    <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{appointmentController.cancelAppointment(appointment)}">
+                                        <i class="material-icons right">delete_forever</i>Cancel Appointment
+                                    </h:commandLink>
+                                 </h:panelGroup>
                             </h:panelGroup>
                         </li>
                     </ui:repeat>  
                 </h:panelGroup>
             </h:panelGroup>
+            
+              <!-- Modal Structure -->
+            <div id="modal1" class="modal">
+              <div class="modal-content">
+                <h7>Search for appointment</h7>
+                <h:panelGroup layout="block" class="row inputContainer" style="margin:40px;">
+                    <h:panelGroup layout="block" class="input-field">
+                        <h:outputLabel for="appointmentDate" value="Appointment date *" class="validate"/>
+                        <h:inputText  id="appointmentDate" class="datepicker" value="#{appointmentController.appointmentDate}" required="true" requiredMessage="This field cannot be empty" >
+                        </h:inputText>
+                        <h:message for = "appointmentDate" style = "color:red" />
+                    </h:panelGroup>
+                </h:panelGroup>
+              </div>
+              <div class="modal-footer" style="height: 200px;display: flex;justify-content: center;">
+                    <h:commandLink class="waves-effect waves-light btn-large grey darken-1" action="#{appointmentController.searchByDate()}">
+                        <i class="material-icons right">delete_forever</i>Search
+                    </h:commandLink>
+              </div>
+            </div>
+            
         </h:form>
          <h:outputScript library="js" name="snackbar.min.js" />
     </h:body>
@@ -159,6 +192,13 @@
     <script>
         window.addEventListener('DOMContentLoaded', function() {
                configureContent();
+               
+                let elems = document.querySelectorAll('.modal');
+                let instances = M.Modal.init(elems);
+                
+                //date picker
+                M.Datepicker.init(document.querySelectorAll('.datepicker'), {format:"dd-mm-yyyy"});
+               
          });
  
         function configureContent() {

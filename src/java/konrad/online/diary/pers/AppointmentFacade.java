@@ -88,4 +88,22 @@ public class AppointmentFacade extends AbstractFacade<Appointment> {
         query.setParameter("searchValue", "%" + searchValue.toUpperCase() + "%");
         return query.getResultList();
     }
+
+    /**
+     * queries the database for all appointments from the given start date to the given end date
+     * @param start
+     * @param end
+     * @param currentUser
+     * @return Appointment List
+     */
+    public List<Appointment> findAppointmentByDate(Date start,Date end, Person currentUser) {
+        TypedQuery<Appointment> query = em.createQuery("SELECT DISTINCT a from Appointment a LEFT JOIN a.guests g WHERE (a.owner.id = :personId OR g.id = :personId) AND a.startTime >= :start AND a.startTime <= :end", Appointment.class);
+        query.setParameter("personId", currentUser.getId());
+        query.setParameter("start", start);
+        query.setParameter("end", end);
+        
+        return query.getResultList();
+
+    }
+    
 }

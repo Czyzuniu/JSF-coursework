@@ -67,6 +67,8 @@ public class PersonController {
          }
     }
     
+    
+    
     /**
      * gets the appointment service
      * @return
@@ -212,7 +214,8 @@ public class PersonController {
     public String registerUser() {
         
         if (!newUser.getPassword().equals(this.repeatPassword)) {
-            FacesContext.getCurrentInstance().addMessage("passwords", new FacesMessage("Passwords do not match"));
+            FacesContext.getCurrentInstance().addMessage("registerForm:password", new FacesMessage("Passwords do not match"));
+            FacesContext.getCurrentInstance().addMessage("registerForm:re-password", new FacesMessage("Passwords do not match"));
             return "";
         } 
         
@@ -222,12 +225,9 @@ public class PersonController {
             
         } catch (AddressException ex) {
             Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
-            FacesContext.getCurrentInstance().addMessage("postalAddressException", new FacesMessage(ex.getMessage()));
+            FacesContext.getCurrentInstance().addMessage("registerForm:postal", new FacesMessage(ex.getMessage()));
             
             return "";
-           
-            
-            //messages do not show???
         }
 
         newUser.setAddress(newAddress);
@@ -336,9 +336,23 @@ public class PersonController {
      * @return "home"
      */
     public String editUser() {
-        personService.updateUser(currentUser);
-        addressService.updateAddress(currentUser.getAddress());
-        return "/home.xhtml?faces-redirect=true";
+        
+        Address newAddress = null;
+        try {
+            newAddress = addressService.createAddress(address);
+            
+        } catch (AddressException ex) {
+            Logger.getLogger(PersonController.class.getName()).log(Level.SEVERE, null, ex);
+            FacesContext.getCurrentInstance().addMessage("registerForm:postal", new FacesMessage(ex.getMessage()));
+            
+            return "";
+        }
+
+        newUser.setAddress(newAddress);
+        personService.registerUser(newUser); 
+        
+        return "/login.xhtml?faces-redirect=true";
+
     }
     
     /**
